@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react'
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { errorHandler, getToast } from '../../../../utils/options';
 import { deleteOneProfessionalInfo } from '../../../../redux/reducers/profileReducer';
 import { axiosInstances } from '../../../../config/config';
@@ -16,6 +17,7 @@ let language_level_data = [
 
 function ProfessionalInfoData(props) {
     const { item, index, getData } = props;
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
 
     // professional information
@@ -34,7 +36,7 @@ function ProfessionalInfoData(props) {
         try {
             const res = await axiosInstances.put(`/professional/information/${item.id}/`, obj);
             if (res.status) {
-                getToast("Изменено успешно.");
+                getToast(t("toastMessage.professionalInfoDataPage.edit_success"));
                 setLoading(false);
                 getData();
             }
@@ -56,64 +58,74 @@ function ProfessionalInfoData(props) {
             <div className='grid gap-6 md:grid-cols-2'>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Желаемая должность
+                        {t(
+                            "extraComponents.professionalInfoData.desired_position_input_label"
+                        )}
                     </span>
                     <input
                         type='text'
                         name='position_professional_update'
                         className='bg-gray-50 text-gray-900 text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-3.5 position'
-                        placeholder='Тестировщик'
+                        placeholder={t(
+                            "extraComponents.professionalInfoData.desired_position_input_placeholder"
+                        )}
                         defaultValue={item?.career_objective}
                         required
                     />
                 </div>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Уровень
+                        {t("extraComponents.professionalInfoData.level")}
                     </span>
                     <select
                         name='level_professional_update'
                         className='bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 outline-none focus:border-blue-500 block w-full p-3.5 h-[47px] level'
                     >
-                        {levelData.map(elem => (
+                        {levelData?.length > 0 && levelData.map(elem => (
                             <option key={elem.value} value={elem.value} selected={elem.name === item.level}>{elem.name}</option>
                         ))}
                     </select>
                 </div>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Иностранный язык
+                        {t(
+                            "extraComponents.professionalInfoData.foreign_language_input_label"
+                        )}
                     </span>
                     <input
                         name='language_professional_update'
                         type='text'
                         className='text-gray-900 bg-custom-light text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3.5 language'
-                        placeholder='English'
+                        placeholder={t(
+                            "extraComponents.professionalInfoData.foreign_language_input_placeholder"
+                        )}
                         defaultValue={item?.laguage}
                         required
                     />
                 </div>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Уровень
+                        {t("extraComponents.professionalInfoData.lang_level")}
                     </span>
                     <select
                         name='languageLevel_professional_update'
                         className='bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 outline-none focus:border-blue-500 block w-full p-3.5 h-[47px] languageLevel'
                     >
-                        {language_level_data.map(el => (
+                        {language_level_data?.length > 0 && language_level_data.map(el => (
                             <option key={el.value} value={el.value} selected={el.name === item.laguage_level}>{el.name}</option>
                         ))}
                     </select>
                 </div>
                 <div className='md:col-span-2'>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Навыки
+                        {t("extraComponents.professionalInfoData.skills_input_label")}
                     </span>
                     <input
                         type='text'
                         name='skills_professional_update'
-                        placeholder='Js'
+                        placeholder={t(
+                            "extraComponents.professionalInfoData.skills_input_placeholder"
+                        )}
                         className='bg-custom-light text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3.5 skills'
                         defaultValue={item?.skills}
                         required
@@ -126,7 +138,7 @@ function ProfessionalInfoData(props) {
                     className='text-white col-span-1 bg-custom-gray border-1 border-custom-gray hover:border-gray-500 transition-all hover:bg-gray-500 hover:text-white font-gilroy-bold p-3 px-[35px] text-[13px] rounded focus:outline-none focus:shadow-outline'
                     onClick={() => deleteItem(item)}
                 >
-                    Удалить
+                    {t("extraComponents.professionalInfoData.delete_button_text")}
                 </button>
                 <button
                     type='button'
@@ -134,7 +146,7 @@ function ProfessionalInfoData(props) {
                     disabled={loading}
                     onClick={() => handleProfessionalInformationData(index)}
                 >
-                    Сохранить
+                    {t("extraComponents.professionalInfoData.save_button_text")}
                 </button>
             </div>
 

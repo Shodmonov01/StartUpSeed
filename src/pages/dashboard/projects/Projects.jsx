@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Typography } from "@material-tailwind/react";
 import ProjectCard from './components/ProjectCard';
 import { deleteOneSelfProject, getSelfAllProjects } from '../../../redux/reducers/projectReducer';
@@ -9,6 +10,7 @@ import { getProfile } from '../../../redux/reducers/profileReducer';
 
 const Projects = (props) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [openDeleteModal, setOpenDeleteModal] = useState({ open: false, data: {} });
 
   // get profile
@@ -79,20 +81,25 @@ const Projects = (props) => {
                 {props.allSelfProjects?.length === 0 ? (
                   <div>
                     <h2 className='text-2xl text-custom-gray font-gunterz mb-5'>
-                      У вас нет активных проектОВ
+                      {t("dashboard.myProjects.current.title")}
                     </h2>
                     <p className='font-gilroy-bold text-sm text-custom-gray'>
-                      Для их поиска перейдите в раздел{' '}
+                      {t("dashboard.myProjects.current.description")}{" "}
                       <Link to="/admin/all-projects">
-                        <span className='text-text-main_green cursor-pointer'>“Проекты” </span> или <br />{' '}
+                        <span className='text-text-main_green cursor-pointer'>
+                          {t("dashboard.myProjects.current.sub_text_one")}
+                        </span>
+                        {t("dashboard.myProjects.current.sub_text_two")} <br />{" "}
                       </Link>
-                      создайте свой
+                      {t("dashboard.myProjects.current.sub_text_three")}
                     </p>
                   </div>
                 ) : (
                   <div>
                     <div className='mb-6'>
-                      <span className='font-gunterz text-[22px] text-custom-gray'>МОИ ПРОЕКТЫ</span>
+                      <span className='font-gunterz text-[22px] text-custom-gray'>
+                        {t("dashboard.myProjects.current.my_project")}
+                      </span>
                     </div>
                     <ProjectCard
                       data={props.allSelfProjects}
@@ -109,7 +116,7 @@ const Projects = (props) => {
                   <button
                     className='bg-custom-gray font-gilroy-bold hover:bg-gray-600 transition-all text-white py-4 px-8 text-sm rounded focus:outline-none focus:shadow-outline mt-4'
                   >
-                    Создать проект
+                    {t("dashboard.myProjects.current.button_text")}
                   </button>
                 </Link>
               </div>

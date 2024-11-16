@@ -9,6 +9,7 @@ export const useAuth = () => {
 
     if (token) {
         const decoded = jwtDecode(token);
+        
         // const { name, roles } = decoded;
 
         // isManager = roles.includes("Manager");

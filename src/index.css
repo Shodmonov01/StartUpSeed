@@ -6,23 +6,51 @@
   font-family: 'Gunterz';
   src: url('../public/fonts/Gunterz-Medium.otf'),
     url('../public/fonts/Gunterz-MediumItalic.otf');
+  font-style: normal;
 }
 
 @font-face {
-  font-family: 'Gilroy';
-  src: url('../public/fonts/Gilroy-UltraLight.ttf'),
-    url('../public/fonts/Gilroy-Thin.ttf'),
+  font-family: 'GilroyRegular';
+  src: url('../public/fonts/Gilroy-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  /* url('../public/fonts/Gilroy-Thin.ttf'),
     url('../public/fonts/Gilroy-SemiBold.ttf'),
     url('../public/fonts/Gilroy-Regular.ttf'),
     url('../public/fonts/Gilroy-Light.ttf'),
     url('../public/fonts/Gilroy-Heavy.ttf'),
     url('../public/fonts/Gilroy-ExtraBold.ttf'),
-    url('../public/fonts/Gilroy-Bold.ttf');
+    url('../public/fonts/Gilroy-Bold.ttf'); */
 }
+
+@font-face {
+  font-family: 'GilroyMedium';
+  src: url('../public/fonts/Gilroy-Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GilroySemiBold';
+  src: url('../public/fonts/Gilroy-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GilroyBold';
+  src: url('../public/fonts/Gilroy-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+
 
 @font-face {
   font-family: 'Montserrat';
   src: url('../public/fonts/Montserrat-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
   /* url('../public/fonts/Montserrat-Regular.ttf'),
   url('../public/fonts/Montserrat-Light.ttf'),
   url('../public/fonts/Montserrat-Medium.ttf'),
@@ -34,7 +62,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 4px;
   height: 0px;
 }
 
@@ -278,6 +306,7 @@ scroll-container {
   scroll-behavior: smooth;
   height: 100%;
 }
+
 
 @media (max-width: 378px) {
 

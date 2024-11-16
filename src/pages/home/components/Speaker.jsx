@@ -1,7 +1,35 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import speakerImage from '../../../assets/images/speaker-girl.png';
+import { getToast, getToastError, getToastWarn } from '../../../utils/options';
+import { axiosInstances } from '../../../config/config';
+import Loading from '../../../components/Loading';
 
 function Speaker() {
+    const { t } = useTranslation();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [loading, setLoading] = useState(false);
+
+    // submit
+    const submitHandler = async data => {
+        setLoading(true);
+        try {
+            const res = await axiosInstances.post("/email/spiker/send/", data);
+            if (res.status == 200 || res.status == 201 || res.status == 204) {
+                getToast("Ваш запрос успешно отправлен.");
+                setLoading(false);
+                reset();
+            } else {
+                getToastWarn(res?.message || res?.data?.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            getToastError(error?.message);
+            setLoading(false);
+        }
+    }
+
     return (
         // {/* speaker section */ }
         <a name="contact">
@@ -11,25 +39,38 @@ function Speaker() {
                         <div className='flex flex-col md:flex-row items-center relative shadow-lg rounded-lg px-6'>
                             <div className='md:w-2/3 w-full p-0 lg:p-4 pt-0 pb-10 lg:pb-32'>
                                 <span className='text-custom-gray text-[20px] lg:text-[30px] font-gunterz font-medium uppercase text-center lg:text-left'>
-                                    Остались <span className='text-text-main_green'>вопросы?</span>
+                                    {t("home.speaker.title_one")}{" "}
+                                    <span className="text-text-main_green">
+                                        {t("home.speaker.title_two")}
+                                    </span>
                                 </span>
-                                <div className='grid mt-4 grid-cols-1 md:grid-cols-3 gap-4 px-4 pl-0'>
+                                <form onSubmit={handleSubmit(data => submitHandler(data))} className='grid mt-4 grid-cols-1 md:grid-cols-3 gap-4 px-4 pl-0'>
                                     <input
-                                        className='bg-transparent rounded-md outline-none border border-gray-300 p-2'
-                                        placeholder='Введите имя'
+                                        className={`bg-transparent rounded-md outline-none border border-gray-300 p-2 ${errors.name ? "border-red-700" : "border-gray-300"}`}
+                                        placeholder={t("home.speaker.name_input_placeholder")}
                                         type='text'
+                                        {...register('name', { required: true })}
                                     />
                                     <input
-                                        className='bg-transparent rounded-md outline-none border border-gray-300 p-2'
-                                        placeholder='Ваш E-mail'
-                                        type='text'
+                                        className={`bg-transparent rounded-md outline-none border border-gray-300 p-2 ${errors.email ? "border-red-700" : "border-gray-300"}`}
+                                        placeholder={t("home.speaker.email_input_placeholder")}
+                                        type='email'
+                                        {...register('email', { required: true })}
                                     />
-                                    <button className='bg-text-main_green text-white rounded-md p-3 md:p-6 font-gilroy-bold'>
-                                        Оставить заявку
+                                    <button
+                                        type="submit"
+                                        className='bg-text-main_green text-white rounded-md p-3 md:p-6 font-gilroy-bold flex items-center justify-center gap-2'
+                                        style={{ cursor: loading ? "not-allowed" : "pointer" }}
+                                        disabled={loading}
+                                    >
+                                        {loading && (
+                                            <Loading border="border-white" />
+                                        )}
+                                        {t("home.speaker.button_text")}
                                     </button>
-                                </div>
+                                </form>
                                 <p className='text-[#939393] font-gilroy mt-6 px-4 pl-0 text-[14px] text-center lg:text-left lg:mt-4 font-medium'>
-                                    Присоединяйтесь к платформе, чтобы стать частью команды
+                                    {t("home.speaker.form_description")}
                                 </p>
                             </div>
 
@@ -37,7 +78,9 @@ function Speaker() {
                                 <div className='relative'>
                                     <img src={speakerImage} alt='' className='w-full' />
                                     <div className='absolute bottom-0 left-0 lg:left-10 right-0 backdrop-blur-lg py-[24px] rounded-[5px] text-center w-[90%] lg:w-[70%] m-auto' style={{ background: "rgba(169, 169, 169, 0.3)" }}>
-                                        <span className='font-bold text-white text-[14px]'>Стань частью команды!</span>
+                                        <span className='font-bold text-white text-[14px]'>
+                                            {t("home.speaker.image_title")}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

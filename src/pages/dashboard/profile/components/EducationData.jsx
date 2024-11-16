@@ -1,11 +1,13 @@
 import React, { memo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { deleteOneEducation } from '../../../../redux/reducers/profileReducer';
 import { axiosInstances } from '../../../../config/config';
 import { errorHandler, getToast } from '../../../../utils/options';
 
 function EducationData(props) {
     const { item, index, getData } = props;
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const start_date_ref = useRef();
     const end_date_ref = useRef();
@@ -25,7 +27,7 @@ function EducationData(props) {
         try {
             const res = await axiosInstances.put(`/education/${item.id}/`, obj);
             if (res.status) {
-                getToast("Изменено успешно.");
+                getToast(t("toastMessage.educationDataPage.edit_success"));
                 setLoading(false);
                 getData();
             }
@@ -46,26 +48,30 @@ function EducationData(props) {
             <div className='grid grid-cols-1 gap-6 mb-6'>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Специальность
+                        {t("extraComponents.educationData.speciality_input_label")}
                     </span>
                     <input
                         className='bg-custom-light appearance-none rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline specialty'
                         name='specialty_education_update'
                         type='text'
-                        placeholder='Программист'
+                        placeholder={t(
+                            "extraComponents.educationData.speciality_input_placeholder"
+                        )}
                         defaultValue={item?.speciality}
                     />
                 </div>
 
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Учебное заведение
+                        {t("extraComponents.educationData.edu_institution_label")}
                     </span>
                     <input
                         className='bg-custom-light appearance-none rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline institution'
                         name='institution_education_update'
                         type='text'
-                        placeholder='МГУ'
+                        placeholder={t(
+                            "extraComponents.educationData.edu_institution_input_placeholder"
+                        )}
                         defaultValue={item?.institution}
                     />
                 </div>
@@ -74,7 +80,7 @@ function EducationData(props) {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Начало обучения
+                        {t("extraComponents.educationData.start_training_time_label")}
                     </span>
                     <input
                         type="date"
@@ -89,7 +95,7 @@ function EducationData(props) {
 
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Окончание обучения
+                        {t("extraComponents.educationData.finish_training_time_label")}
                     </span>
                     <input
                         type="date"
@@ -109,7 +115,7 @@ function EducationData(props) {
                     className='text-white col-span-1 bg-custom-gray border-1 border-custom-gray hover:border-gray-500 transition-all hover:bg-gray-500 hover:text-white font-gilroy-bold p-3 px-[35px] text-[13px] rounded focus:outline-none focus:shadow-outline'
                     onClick={() => deleteItem(item)}
                 >
-                    Удалить
+                    {t("extraComponents.educationData.delete_button_text")}
                 </button>
                 <button
                     type='submit'
@@ -117,7 +123,7 @@ function EducationData(props) {
                     disabled={loading}
                     onClick={() => handleExperienceData(index)}
                 >
-                    Сохранить
+                    {t("extraComponents.educationData.save_button_text")}
                 </button>
             </div>
 

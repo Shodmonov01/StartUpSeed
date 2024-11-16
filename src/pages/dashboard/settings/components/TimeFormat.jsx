@@ -1,10 +1,13 @@
 import React, { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 function TimeFormat() {
+    const { t } = useTranslation();
+
     return (
         <div className=''>
             <span className='block text-gray-700 text-sm mb-2'>
-                Часовой пояс
+                {t("dashboard.settings.time_input_label")}
             </span>
             <select
                 className='block appearance-none w-full bg-white hover:border-gray-500 p-4 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline'

@@ -1,20 +1,21 @@
 import React, { memo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { levels } from '../../../../utils/options';
 
 function ReplyForm(props) {
     const { element } = props;
+    const { t } = useTranslation();
     const { value, state } = element;
     const { register, handleSubmit, formState: { errors } } = useForm();
-
-    // console.log(element);
 
     // submit data
     const submitHandler = data => {
         if (data.desc.trim()?.length > 0 && state) {
             props.replyHandler({
                 project: state.id,
-                description: data.desc
+                description: data.desc,
+                // owner: state.owner?.id,
             });
         }
     }
@@ -32,7 +33,9 @@ function ReplyForm(props) {
                 <div className='flex flex-col gap-2 mt-2'>
                     <div className=''>
                         <h3 className='font-gilroy-bold text-custom-gray text-sm'>
-                            <span className="font-semibold">Задачи и достижения: &nbsp;</span>
+                            <span className="font-semibold">
+                                {t("extraComponents.replyForm.tasks_and_acheiv")} &nbsp;
+                            </span>
                             <span className='text-gray-600'>
                                 {value ? value.tasks : ""}
                             </span>
@@ -40,7 +43,9 @@ function ReplyForm(props) {
                     </div>
                     <div className=''>
                         <h3 className='font-gilroy-bold text-sm text-custom-gray'>
-                            <span className="font-semibold">Навыки: &nbsp;</span>
+                            <span className="font-semibold">
+                                {t("extraComponents.replyForm.skills")} &nbsp;
+                            </span>
                             {value && value.tags?.length > 0 && value.tags.map((el, index) => (
                                 <span key={el.id} className=' text-gray-500'>{el.name} {value.tags?.length - 1 !== index && ","}</span>
                             ))}
@@ -50,10 +55,12 @@ function ReplyForm(props) {
 
                 <div className='flex flex-col'>
                     <span className='text-custom-gray text-[14px] mb-2 mt-8'>
-                        Напишите письмо
+                        {t("extraComponents.replyForm.write_letter")}
                     </span>
                     <textarea
-                        placeholder='Комментарий'
+                        placeholder={t(
+                            "extraComponents.replyForm.write_letter_input_placeholder"
+                        )}
                         className={`bg-custom-light border border-custom-light outline-none text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3.5 ${errors.desc ? "border-red-700" : "border-custom-light"}`}
                         rows={4}
                         {...register('desc', { required: true })}
@@ -66,13 +73,13 @@ function ReplyForm(props) {
                         className='text-white col-span-1 bg-custom-gray transition-all hover:bg-gray-700 hover:text-white font-gilroy-bold py-5 px-10 rounded focus:outline-none focus:shadow-outline'
                         onClick={props.closeModal}
                     >
-                        Отменить
+                        {t("extraComponents.replyForm.cancel_button_text")}
                     </button>
                     <button
                         type='submit'
                         className={`text-white col-span-1 transition-all bg-main-green font-gilroy font-semibold py-5 px-10 rounded focus:outline-none focus:shadow-outline`}
                     >
-                        Отправить
+                        {t("extraComponents.replyForm.send_button_text")}
                     </button>
                 </div>
             </div>

@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from '../pages/home/Home';
 import Layout from '../layout/Layout';
-
 import Register from '../pages/auth/Register';
 import Login from '../pages/auth/Login';
 import ForgotPassword from '../pages/auth/ForgotPassword';
+import PageNotFound from '../pages/pageNotFound/PageNotFound';
 
 // dashboard
 // import DashboardLayout from '../layout/DashboardLayout';
@@ -34,6 +34,10 @@ export const router = createBrowserRouter([
         path: '/',
         element: <Home />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   // auth
@@ -49,7 +53,6 @@ export const router = createBrowserRouter([
     path: '/forgot-password',
     element: <ForgotPassword />,
   },
-
   // dashboard
   // {
   //   path: '/admin',

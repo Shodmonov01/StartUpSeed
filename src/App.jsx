@@ -2,6 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { router as mainRouter } from './routes/routes';
 import { dashboardRouter } from './routes/dashboardRoutes';
+import './utils/i18n';
 
 import { useAuth } from './services/useAuth';
 // import dashboardRouter from './routes/dashboardRoutes';

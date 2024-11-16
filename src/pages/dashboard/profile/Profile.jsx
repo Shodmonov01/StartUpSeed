@@ -26,8 +26,6 @@ const Profile = (props) => {
     props.onGetProfile({}); // get profile
   }
 
-  console.log(props.profileData);
-
   return (
     <main className='h-[90vh] overflow-y-auto'>
       <div className='max-w-5xl mx-auto my-10 p-0 lg:p-8 bg-white shadow-lg rounded-lg'>

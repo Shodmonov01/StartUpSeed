@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
 import { getAllAbout } from '../../../../redux/reducers/profileReducer';
 import { errorHandler, getToast } from '../../../../utils/options';
@@ -10,6 +11,7 @@ import AboutForm from './AboutForm';
 
 function About(props) {
     const { allAbout } = props;
+    const { t } = useTranslation();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(0);
@@ -44,7 +46,7 @@ function About(props) {
         try {
             const res = await axiosInstances.post("/about/", obj);
             if (res.status) {
-                getToast("Успешно сохранено.");
+                getToast(t("toastMessage.aboutPage.saved_success"));
                 reset();
                 setLoading(false);
                 getData();
@@ -82,7 +84,7 @@ function About(props) {
 
                 <div className="dark:text-white text-xs flex flex-col gap-1 p-2 px-1 lg:px-2 py-4">
                     <span className='text-[20px] lg:text-[24px] font-medium text-custom-gray mb-8 lg:text-left text-center'>
-                        О себе
+                        {t("dashboard.profile.about_me.title")}
                     </span>
                     <AboutForm
                         handleSubmitAbout={handleSubmitAbout}

@@ -7,7 +7,7 @@ function Users(props) {
     return (
         users && Array.isArray(users) && users?.length > 0 && users.map(item => (
             item.initiator?.id !== item.receiver?.id && (
-                <div key={item.id} className={`getMessagesUsers flex items-center gap-2 p-3 rounded-lg shadow mb-3 cursor-pointer hover:bg-gray-100 transition-all ${item.id === selectedUser.id ? "bg-custom-gray text-white" : "bg-white text-custom-gray"}`} onClick={() => props.getMessages(item)}>
+                <div key={item.id} className={`getMessagesUsers flex items-center gap-2 p-3 rounded-lg shadow mb-3 cursor-pointer transition-all ${item.id === selectedUser.id ? "bg-custom-gray text-white" : "bg-white text-custom-gray hover:bg-gray-100"}`} onClick={() => props.getMessages(item)}>
                     {item.receiver.id !== props.profileData.id ? (
                         <img
                             src={item.receiver?.avatar ? item.receiver?.avatar : userImg}

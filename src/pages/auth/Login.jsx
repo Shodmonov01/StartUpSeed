@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import Cookies from 'universal-cookie';
+import { useTranslation } from 'react-i18next';
 
 // react-icons
 import { IoEye } from 'react-icons/io5';
@@ -16,6 +17,7 @@ import { MdClose } from 'react-icons/md';
 
 const Login = (props) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const cookies = new Cookies();
 
@@ -36,13 +38,14 @@ const Login = (props) => {
         if (res.status === 201 || res.status === 200) {
           if (res.data?.access) {
             cookies.set('user', res.data.access, { path: '/', secure: true, sameSite: "none", });
+
             props.onLoginHandler(res.data.access);
             // window.location.replace("/admin/pages");
             window.location.replace("/role");
           }
           props.onLoading(false);
         } else {
-          getToastWarn("Логин или пароль введены неправильно")
+          getToastWarn(t("toastMessage.loginPage.login_password_incorrect"));
           props.onLoading(false);
         }
       } catch (error) {
@@ -51,36 +54,40 @@ const Login = (props) => {
           Object.values(error?.response?.data).forEach((item, index) => {
             if (item?.length > 0 && Array.isArray(item)) {
               item.map(el => {
-                getToastError("Логин или пароль введены неправильно");
+                getToastError(
+                  t("toastMessage.loginPage.login_password_incorrect")
+                );
               })
             } else {
-              getToastError("Логин или пароль введены неправильно");
+              getToastError(
+                t("toastMessage.loginPage.login_password_incorrect")
+              );
             }
           })
         }
         props.onLoading(false);
       }
-    } else getToastWarn("Логин или пароль введен неверно.");
+    } else getToastWarn(t("toastMessage.loginPage.login_password_incorrect_more"));
   };
 
   return (
     <div className='flex items-center justify-center h-[100vh] bg-black m-auto relative'>
       <div className='flex flex-col w-full md:max-w-xl'>
         <h1 className='lg:text-4xl text-xl text-text-main_green font-gunterz text-center'>
-          Вход
+          {t("login.title")}
         </h1>
         <form onSubmit={handleSubmit(data => submitHandler(data))} className='flex text-white flex-col px-6 pt-6 w-full'>
           <input
             className={`bg-input_color outline-none border w-full py-4 px-4 rounded mb-4 ${errors.email ? "border-red-700" : "border-input_color"}`}
             type='email'
-            placeholder='Email'
+            placeholder={t("login.email_input_placeholder")}
             {...register('email', { required: true })}
           />
           <div className='flex items-center rounded-md bg-input_color relative'>
             <input
               type={showPassword ? 'text' : 'password'}
               className={`bg-input_color outline-none border w-full py-4 px-4 pr-8 rounded ${errors.password ? "border-red-700" : "border-input_color"}`}
-              placeholder='Пароль'
+              placeholder={t("login.password_input_placeholder")}
               {...register('password', { required: true })}
             />
             <button
@@ -99,12 +106,16 @@ const Login = (props) => {
             {props.loading && (
               <div className="loadingg"></div>
             )}
-            Вход
+            {t("login.button_text")}
           </button>
           <div className='flex text-white font-gilroy-bold text-center items-center justify-center my-4 gap-6'>
-            <Link to={'/forgot-password'} className='text-[13px] lg:text-[14px]'>Забыли пароль?</Link>
+            <Link to={'/forgot-password'} className='text-[13px] lg:text-[14px]'>
+              {t("login.forgot_password")}
+            </Link>
             <div className='w-[1px] h-[22px] bg-white'></div>
-            <Link to={'/register'} className='text-[13px] lg:text-[14px]'>Регистрация</Link>
+            <Link to={'/register'} className='text-[13px] lg:text-[14px]'>
+              {t("login.register")}
+            </Link>
           </div>
         </form>
       </div>

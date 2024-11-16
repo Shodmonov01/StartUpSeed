@@ -16,6 +16,7 @@ import Specializations from '../pages/specializations/Specializations';
 import SpecializationsDetails from '../pages/specializations/SpecializationsDetails';
 import OneProjectView from '../pages/dashboard/projects/components/OneProjectView';
 import Role from '../pages/dashboard/role/Role';
+import PageNotFound from '../pages/pageNotFound/PageNotFound';
 
 export const dashboardRouter = createBrowserRouter([
   {
@@ -82,11 +83,15 @@ export const dashboardRouter = createBrowserRouter([
         path: '/admin/settings',
         element: <Settings />,
       },
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
   {
     path: '/',
     // element: <Navigate to="/admin/pages" replace />,
     element: <Navigate to="/role" replace />,
-  }
+  },
 ]);

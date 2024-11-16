@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { IoMdEyeOff } from 'react-icons/io';
 import { IoEye } from 'react-icons/io5';
 import { axiosInstances } from '../../../../../config/config';
@@ -7,6 +8,7 @@ import { errorHandler, getToast, getToastWarn } from '../../../../../utils/optio
 
 function PasswordModal(props) {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
@@ -25,7 +27,7 @@ function PasswordModal(props) {
                             confirm_password: data.password3,
                         });
                         if (res.status === 200 || res.status === 201) {
-                            getToast("Пароль успешно изменен.");
+                            getToast(t("toastMessage.passwordModalPage.edit_password"));
                             props.closeModal();
                             setLoading(false);
                         } else {
@@ -37,8 +39,8 @@ function PasswordModal(props) {
                         setLoading(false);
                         errorHandler(error);
                     }
-                } else getToastWarn("Проверьте новый пароль и повторите пароль");
-            } else getToastWarn("Пароль должен быть длиной не менее 8 символов.");
+                } else getToastWarn(t("toastMessage.passwordModalPage.new_password"));
+            } else getToastWarn(t("toastMessage.passwordModalPage.validation"));
         }
     }
 
@@ -48,19 +50,23 @@ function PasswordModal(props) {
             <form onSubmit={handleSubmit(data => submitHandler(data))}>
                 <div className="sm:text-left text-txt_color-slate p-4 md:p-6 lg:p-14 flex flex-col gap-8">
                     <div className="text-sm sm:text-base font-normal flex flex-col gap-2">
-                        <h3 className='font-thin font-gunterz lg:text-left text-center'>СМЕНА ПАРОЛЯ</h3>
-                        <span className='text-[#a7a5a5]'>После изменения пароля прайзайдёт выход из аккаунта</span>
+                        <h3 className='font-thin font-gunterz lg:text-left text-center'>
+                            {t("dashboard.settings.password_modal.title")}
+                        </h3>
+                        <span className='text-[#a7a5a5]'>{t("dashboard.settings.password_modal.description")}</span>
                     </div>
 
                     <div className='flex flex-col gap-4'>
                         <div className='flex flex-col rounded-md relative'>
                             <span className='block font-gilroy text-sm font-bold mb-2'>
-                                Текущий пароль
+                                {t("dashboard.settings.password_modal.current_password_input")}
                             </span>
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 className={`bg-[#fafafa] outline-none border w-full py-4 px-4 pr-8 rounded ${errors.password ? "border-red-700" : "border-[#fafafa]"}`}
-                                placeholder='Текущий пароль'
+                                placeholder={t(
+                                    "dashboard.settings.password_modal.current_password_input"
+                                )}
                                 {...register('password', { required: true })}
                             />
                             <button
@@ -73,12 +79,14 @@ function PasswordModal(props) {
                         </div>
                         <div className='flex flex-col rounded-md relative'>
                             <span className='block font-gilroy text-sm font-bold mb-2'>
-                                Новый пароль
+                                {t("dashboard.settings.password_modal.new_password_input")}
                             </span>
                             <input
                                 type={showPassword2 ? 'text' : 'password'}
                                 className={`bg-[#fafafa] outline-none border w-full py-4 px-4 pr-8 rounded ${errors.password2 ? "border-red-700" : "border-[#fafafa]"}`}
-                                placeholder='Новый пароль'
+                                placeholder={t(
+                                    "dashboard.settings.password_modal.new_password_input"
+                                )}
                                 {...register('password2', { required: true })}
                             />
                             <button
@@ -91,12 +99,16 @@ function PasswordModal(props) {
                         </div>
                         <div className='flex flex-col rounded-md relative'>
                             <span className='block font-gilroy text-sm font-bold mb-2'>
-                                Повторите новый пароль
+                                {t(
+                                    "dashboard.settings.password_modal.repeat_new_password_input"
+                                )}
                             </span>
                             <input
                                 type={showPassword3 ? 'text' : 'password'}
                                 className={`bg-[#fafafa] outline-none border w-full py-4 px-4 pr-8 rounded ${errors.password3 ? "border-red-700" : "border-[#fafafa]"}`}
-                                placeholder='Повторите новый пароль'
+                                placeholder={t(
+                                    "dashboard.settings.password_modal.repeat_new_password_input"
+                                )}
                                 {...register('password3', { required: true })}
                             />
                             <button
@@ -115,14 +127,14 @@ function PasswordModal(props) {
                             className='text-white col-span-1 bg-custom-gray transition-all hover:bg-gray-700 hover:text-white font-gilroy-bold p-5 px-10 rounded focus:outline-none focus:shadow-outline w-full lg:w-[40%]'
                             onClick={props.closeModal}
                         >
-                            Отменить
+                            {t("dashboard.settings.password_modal.cancel_button_text")}
                         </button>
                         <button
                             type='submit'
                             className={`text-white col-span-1 transition-all bg-main-green font-gilroy font-bold py-5 px-10 rounded focus:outline-none focus:shadow-outline w-full lg:w-[60%] ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
                             disabled={loading}
                         >
-                            Сохранить
+                            {t("dashboard.settings.password_modal.save_button_text")}
                         </button>
                     </div>
                 </div>

@@ -1,9 +1,8 @@
 import React, { forwardRef } from 'react';
 import { BiSend } from 'react-icons/bi';
-import { BsSend, BsSendFill } from 'react-icons/bs';
 
 const InputTag = forwardRef((props, ref) => {
-    const { disabled = false } = props;
+    const { disabled = false, index, idx } = props;
 
     return (
         <div className="relative md:col-span-5">
@@ -17,7 +16,7 @@ const InputTag = forwardRef((props, ref) => {
                             {props.tags.map(tag => (
                                 <span key={tag.id} className='border p-1 px-2 pr-4 rounded-md relative bg-blue-500 text-white'>
                                     {tag.name}
-                                    <span className='w-3 absolute top-0 right-0 cursor-pointer' onClick={() => props.deleteItem(tag.id, props.item.id)}>&times;</span>
+                                    <span className='w-3 absolute top-0 right-0 cursor-pointer' onClick={() => props.deleteItem(index, idx, tag.id)}>&times;</span>
                                     {/* <XMarkIcon className='w-3 absolute top-0 right-0 cursor-pointer' onClick={() => props.deleteItem(tag.id)} /> */}
                                 </span>
                             ))}

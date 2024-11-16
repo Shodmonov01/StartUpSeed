@@ -1,16 +1,19 @@
 import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoStarSharp } from 'react-icons/io5';
 import { getToastWarn } from '../../../../utils/options';
+import noImage from '../../../../assets/images/no-image.png';
 
 function Details({ data, deleteItem }) {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     // add favorite
     const deleteFavorite = async value => {
         if (value)
             deleteItem(value);
-        else getToastWarn("Вы не можете удалить это.");
+        else getToastWarn(t("toastMessage.detailsPage.cant_delete"));
     }
 
     // navigate handler
@@ -30,9 +33,9 @@ function Details({ data, deleteItem }) {
                             >
                                 <div className='flex items-center justify-center h-16 w-16 rounded-full text-white mr-4 border'>
                                     {project ? (
-                                        <img src={project.project_image} alt='no image' />
+                                        <img src={project.project_image} alt='no image' className='rounded-full h-full' />
                                     ) : (
-                                        <img src="" alt='no image' />
+                                        <img src={noImage} alt='no image' className='rounded-full h-full' />
                                     )}
                                 </div>
                                 <div className='flex-1'>
@@ -47,13 +50,15 @@ function Details({ data, deleteItem }) {
                         </div>
 
                         <div className='absolute top-[30%] right-4' onClick={() => deleteFavorite(project)}>
-                            <IoStarSharp className='text-3xl text-text-main_green' />
+                            <IoStarSharp className='text-3xl text-text-main_green cursor-pointer' />
                         </div>
                     </div>
                 )
             }) : (
                 <div className='flex justify-center mt-4'>
-                    <span className='text-gray-500'>Избранное не найдено.</span>
+                    <span className='text-gray-500'>
+                        {t("dashboard.featured.not_found")}
+                    </span>
                 </div>
             )}
         </>

@@ -1,11 +1,13 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { FaUserCircle } from 'react-icons/fa';
 import { BiCamera } from 'react-icons/bi';
 import { getToast, getToastError } from '../../../../utils/options';
 import { axiosInstances } from '../../../../config/config';
 
 function Self(props) {
+    const { t } = useTranslation();
     const { profileData } = props;
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const [sex, setSex] = useState(profileData.hasOwnProperty("sex") ? profileData?.sex : "");
@@ -56,7 +58,7 @@ function Self(props) {
                 },
             });
             if (res.status === 201 || res.status === 200) {
-                getToast("Изменено успешно.");
+                getToast(t("toastMessage.selfPage.edit_success"));
                 props.getData();
                 setLoading(false);
             }
@@ -76,9 +78,9 @@ function Self(props) {
                     <div className='w-[60px] h-[60px]'>
                         {file ? (
                             typeof file === "string" ? (
-                                <img src={file} alt="" className='w-full h-full rounded-full' />
+                                <img src={file} alt="" className='w-full h-full rounded-full object-cover' />
                             ) : (
-                                <img src={URL.createObjectURL(file)} alt="" className='w-full h-full rounded-full' />
+                                <img src={URL.createObjectURL(file)} alt="" className='w-full h-full rounded-full object-cover' />
                             )
                         ) : (
                             <FaUserCircle className='text-gray-400 w-full h-full' />
@@ -109,12 +111,16 @@ function Self(props) {
                     <div className='w-full px-3 mb-6 md:mb-0 col-span-1'>
                         <div className='mb-4'>
                             <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                                Имя <span className='text-red-700'>*</span>
+                                {t(
+                                    "dashboard.profile.main_information.firstname_input_placeholder"
+                                )}{" "} <span className='text-red-700'>*</span>
                             </span>
                             <input
                                 type='text'
                                 name='firstName'
-                                placeholder='Имя'
+                                placeholder={t(
+                                    "dashboard.profile.main_information.firstname_input_placeholder"
+                                )}
                                 className={`bg-gray-50 text-gray-900 text-sm rounded-lg outline-none border focus:ring-blue-500 focus:border-blue-500 block w-full p-3 ${errors.firstname ? "border-red-700" : "border-gray-50"}`}
                                 {...register('firstname', { required: true, maxLength: 50 })}
                                 autoComplete='true'
@@ -124,12 +130,16 @@ function Self(props) {
                     <div className='w-full px-3 mb-6 md:mb-0 col-span-1'>
                         <div className='mb-4'>
                             <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                                Фамилия <span className='text-red-700'>*</span>
+                                {t(
+                                    "dashboard.profile.main_information.lastname_input_placeholder"
+                                )}{" "} <span className='text-red-700'>*</span>
                             </span>
                             <input
                                 type='text'
                                 name='lastName'
-                                placeholder='Фамилия'
+                                placeholder={t(
+                                    "dashboard.profile.main_information.lastname_input_placeholder"
+                                )}
                                 className={`bg-gray-50 text-gray-900 text-sm rounded-lg outline-none border focus:ring-blue-500 focus:border-blue-500 block w-full p-3 ${errors.lastname ? "border-red-700" : "border-gray-50"}`}
                                 {...register('lastname', { required: true, maxLength: 50 })}
                                 autoComplete='true'
@@ -139,7 +149,9 @@ function Self(props) {
                     <div className='w-full px-3 mb-6 md:mb-0 col-span-1'>
                         <div className='mb-4'>
                             <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                                Пол <span className='text-red-700'>*</span>
+                                {t(
+                                    "dashboard.profile.main_information.gender_select_placeholder"
+                                )}{" "} <span className='text-red-700'>*</span>
                             </span>
                             <select
                                 name='gender_sex'
@@ -147,16 +159,24 @@ function Self(props) {
                                 onChange={handleInputChange}
                                 className='block appearance-none w-full bg-custom-light p-3 rounded leading-tight focus:outline-none focus:shadow-outline text-sm'
                             >
-                                <option value=''>Не указан</option>
-                                <option value='1'>Мужской</option>
-                                <option value='2'>Женский</option>
+                                <option value="">
+                                    {t("dashboard.profile.main_information.not_given_select")}
+                                </option>
+                                <option value="1">
+                                    {t("dashboard.profile.main_information.man_select")}
+                                </option>
+                                <option value="2">
+                                    {t("dashboard.profile.main_information.woman_select")}
+                                </option>
                             </select>
                         </div>
                     </div>
                     <div className='w-full px-3 mb-6 md:mb-0 col-span-1'>
                         <div className='mb-4'>
                             <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                                Дата рождения <span className='text-red-700'>*</span>
+                                {t(
+                                    "dashboard.profile.main_information.birthday_input_placeholder"
+                                )}{" "} <span className='text-red-700'>*</span>
                             </span>
                             <div className='w-full'>
                                 <input
@@ -175,12 +195,16 @@ function Self(props) {
                     <div className='w-full px-3 mb-6 md:mb-0 col-span-1'>
                         <div className='mb-4'>
                             <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                                Страна
+                                {t(
+                                    "dashboard.profile.main_information.country_input_placeholder"
+                                )}
                             </span>
                             <input
                                 type='text'
                                 name='country'
-                                placeholder='Страна'
+                                placeholder={t(
+                                    "dashboard.profile.main_information.country_input_placeholder"
+                                )}
                                 className={`bg-custom-light rounded w-full p-3 text-gray-700 leading-tight border outline-none ${errors.country ? "border-red-700" : "border-custom-light"}`}
                                 maxLength={250}
                                 {...register('country', { required: true, maxLength: 50 })}
@@ -192,12 +216,14 @@ function Self(props) {
                     <div className='w-full px-3 mb-6 md:mb-0 col-span-1'>
                         <div className='mb-4'>
                             <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                                Город
+                                {t("dashboard.profile.main_information.city_input_placeholder")}
                             </span>
                             <input
                                 type='text'
                                 name='city'
-                                placeholder='Город'
+                                placeholder={t(
+                                    "dashboard.profile.main_information.city_input_placeholder"
+                                )}
                                 className={`bg-custom-light rounded w-full p-3 text-gray-700 leading-tight border outline-none ${errors.city ? "border-red-700" : "border-custom-light"}`}
                                 maxLength={250}
                                 {...register('city', { required: true, maxLength: 50 })}
@@ -212,7 +238,7 @@ function Self(props) {
                         className={`bg-text-main_green border text-white border-text-main_green w-full lg:w-auto hover:bg-main-green hover:text-white font-gilroy-bold py-3 px-6 rounded focus:outline-none text-[13px] focus:shadow-outline ${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
                         disabled={loading}
                     >
-                        Сохранить
+                        {t("dashboard.profile.main_information.button_text")}
                     </button>
                 </div>
             </form>

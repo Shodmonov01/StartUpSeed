@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
 import { getAllExperience } from '../../../../redux/reducers/profileReducer';
 import { errorHandler, getToast } from '../../../../utils/options';
@@ -10,6 +11,7 @@ import ExperienceForm from './ExperienceForm';
 
 function Experience(props) {
     const { allExperience } = props;
+    const { t } = useTranslation();
     const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(0);
@@ -52,7 +54,7 @@ function Experience(props) {
         try {
             const res = await axiosInstances.post("/experience/", obj);
             if (res.status) {
-                getToast("Успешно сохранено.");
+                getToast(t("toastMessage.experiencePage.saved_success"));
                 reset();
                 setLoading(false);
                 getData();
@@ -91,7 +93,7 @@ function Experience(props) {
 
                 <div className="dark:text-white text-xs flex flex-col gap-1 p-2 px-1 lg:px-2 py-4">
                     <span className='text-[20px] lg:text-[24px] font-medium text-custom-gray mb-8 lg:text-left text-center'>
-                        Опыт работы
+                        {t("dashboard.profile.experience.title")}
                     </span>
                     <ExperienceForm
                         handleExperience={handleExperience}

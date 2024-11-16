@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Cookies from "universal-cookie";
+import { useTranslation } from 'react-i18next';
 import Email from './components/email/Email';
 import PhoneNumber from './components/phoneNumber/PhoneNumber';
 import Password from './components/password/Password';
@@ -14,6 +15,7 @@ import { axiosInstances } from '../../../config/config';
 
 const Settings = (props) => {
   const cookie = new Cookies();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -66,7 +68,9 @@ const Settings = (props) => {
   return (
     <>
       <div className='max-w-5xl mx-auto my-10'>
-        <h1 className='font-gunterz text-custom-gray text-xl lg:text-2xl lg:text-left text-center'>Настройки</h1>
+        <h1 className='font-gunterz text-custom-gray text-xl lg:text-2xl lg:text-left text-center'>
+          {t("dashboard.settings.title")}
+        </h1>
         <div className='max-w-4xl my-8 p-2 lg:p-6 bg-white shadow-lg rounded-lg flex flex-col gap-6'>
           {/* email */}
           <Email
@@ -91,9 +95,9 @@ const Settings = (props) => {
             <button
               type="button"
               onClick={openDeleteModalHandler}
-              className='text-white bg-text-main_green lg:w-auto w-full font-gilroy-bold text-sm px-[40px] py-4 rounded focus:outline-none focus:shadow-outline text-[13px]'
+              className='text-white bg-custom-orange lg:w-auto w-full font-gilroy-bold text-sm px-[40px] py-4 rounded focus:outline-none focus:shadow-outline text-[13px]'
             >
-              Удалить аккаунт
+              {t("dashboard.settings.button_text")}
             </button>
           </div>
         </div>

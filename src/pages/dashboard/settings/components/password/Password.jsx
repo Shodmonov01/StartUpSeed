@@ -1,8 +1,10 @@
 import React, { memo, useCallback, useState } from 'react';
-import Modal from '../../../../../components/modal/Modal';
+import { useTranslation } from 'react-i18next';
 import PasswordModal from './PasswordModal';
+import Modal from '../../../../../components/modal/Modal';
 
 function Password(props) {
+    const { t } = useTranslation();
     const [openPasswordModal, setOpenPasswordModal] = useState({ open: false, data: {} });
 
     // open add unit modal
@@ -20,13 +22,13 @@ function Password(props) {
             <div className='flex items-end gap-4'>
                 <div className='w-full'>
                     <span className='block font-gilroy text-sm font-bold mb-2'>
-                        Пароль
+                    {t("dashboard.settings.password_input_label")}
                     </span>
                     <input className='appearance-none bg-custom-light rounded-md w-full p-3.5 text-gray-700 leading-tight focus:outline-none'
                         id="password"
                         name="passwords"
                         type="password"
-                        placeholder="••••••••••••••"
+                        placeholder={t("dashboard.settings.password_input_placeholder")}
                         disabled
                     />
                 </div>
@@ -34,7 +36,7 @@ function Password(props) {
                     className='bg-custom-gray hover:bg-gray-900 text-white font-gilroy p-3 rounded-md focus:outline-none focus:shadow-outline text-]13px] lg:text-[15px]'
                     onClick={() => openPasswordModalHandler("item")}
                 >
-                    Изменить
+                      {t("dashboard.settings.password_input_button")}
                 </button>
             </div>
 

@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoIosTrash } from 'react-icons/io';
 import { LiaEdit } from 'react-icons/lia';
 
 const ProjectCard = (props) => {
   const { data } = props;
+  const { t } = useTranslation();
   const navigate = useNavigate();
-
-  // console.log(data);
 
   // navigate
   const navigateHandler = item => {
@@ -19,8 +19,12 @@ const ProjectCard = (props) => {
       let all_number = 0, all_peoples = 0;
       if (Array.isArray(item.employees) && item.employees?.length > 0) {
         item.employees.forEach(el => {
-          all_number += Number(el.people_needed);
-          all_peoples += Number(el.people_now);
+          if (el?.length > 0) {
+            el.forEach(elementy => {
+              all_number += Number(elementy.people_needed);
+              all_peoples += Number(elementy.people_now);
+            })
+          }
         })
       }
       return (
@@ -88,7 +92,7 @@ const ProjectCard = (props) => {
             </div>
             <div className='mt-2 md:mt-10 w-full'>
               <button onClick={() => navigateHandler(item)} className='cursor-pointer block border border-main-green hover:bg-main-green hover:text-white transition-all text-main-green p-3 px-6 rounded focus:outline-none w-full focus:shadow-outline'>
-                Посмотреть
+                {t("extraComponents.projectCard.look_text")}
               </button>
             </div>
           </div>

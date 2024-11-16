@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { FaUserTie, FaPenToSquare } from 'react-icons/fa6';
 import { getProfile } from '../../../redux/reducers/profileReducer';
 import { axiosInstances } from '../../../config/config';
 import { errorHandler, getToastWarn } from '../../../utils/options';
 
 function Role(props) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [activeBoxFirst, setActiveBoxFirst] = useState(false);
     const [activeBoxSecond, setActiveBoxSecond] = useState(false);
@@ -65,20 +67,28 @@ function Role(props) {
         <div className='h-[100vh] bg-gradient-to-t from-[#000] via-[#001] to-[#002] flex items-center justify-center'>
             <div className='bg-white w-[90%] m-auto flex flex-col items-center justify-center rounded-xl p-4 gap-8'>
                 <div>
-                    <span className='text-[24px] lg:text-[28px] text-[#1a1a1a] font-gilroy-bold text-center flex justify-center'>Пожалуйста, выберите свою роль</span>
+                    <span className='text-[24px] lg:text-[28px] text-[#1a1a1a] font-gilroy-bold text-center flex justify-center'>
+                        {t("roles.title")}
+                    </span>
                 </div>
                 <div className='flex items-center flex-wrap gap-10'>
                     <div className={`shadow-xl p-4 rounded-lg bg-white hover:bg-[#e0eaff] transition-all flex flex-col gap-2 items-center justify-center w-full md:w-[130px] cursor-pointer ${activeBoxFirst && 'border-2 border-text-main_green'} `} onClick={box1Handler}>
                         <FaUserTie className={`${activeBoxFirst ? 'text-text-main_green' : 'text-text-main_green'} p-2`} size={60} />
-                        <span className={`${activeBoxFirst ? 'text-text-main_green' : 'text-[#bfbfbf]'} text-[14px] font-gunterz-bold`}>Работадатель</span>
+                        <span className={`${activeBoxFirst ? 'text-text-main_green' : 'text-[#bfbfbf]'} text-[14px] font-gunterz-bold`}>
+                            {t("roles.role_one")}
+                        </span>
                     </div>
                     <div className={`shadow-xl p-4 rounded-lg bg-white hover:bg-[#e0eaff] transition-all flex flex-col gap-2 items-center justify-center w-full md:w-[130px] cursor-pointer ${activeBoxSecond && 'border-2 border-text-main_green'} `} onClick={box2Handler}>
                         <FaPenToSquare className={`${activeBoxSecond ? 'text-text-main_green' : 'text-text-main_green'} p-2`} size={60} />
-                        <span className={`${activeBoxSecond ? 'text-text-main_green' : 'text-[#bfbfbf]'} text-[14px] font-gunterz-bold`}>Соискатель</span>
+                        <span className={`${activeBoxSecond ? 'text-text-main_green' : 'text-[#bfbfbf]'} text-[14px] font-gunterz-bold`}>
+                            {t("roles.role_two")}
+                        </span>
                     </div>
                 </div>
                 <div>
-                    <button type='button' className='bg-text-main_green hover:bg-main-green text-white text-[14px] py-2 px-10 rounded-full transition-all' onClick={switchCheckedHandler}>Продолжать</button>
+                    <button type='button' className='bg-text-main_green hover:bg-main-green text-white text-[14px] py-2 px-10 rounded-full transition-all' onClick={switchCheckedHandler}>
+                        {t("roles.button_text")}
+                    </button>
                 </div>
             </div>
         </div>

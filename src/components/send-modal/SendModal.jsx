@@ -1,10 +1,12 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
 import { useAuth } from '../../services/useAuth';
 
 function SendModal({ data, isOpen, onClose = true }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   let { user_id } = useAuth();
   const text_ref = useRef();
 
@@ -26,7 +28,10 @@ function SendModal({ data, isOpen, onClose = true }) {
     <>
       <Dialog placeholder={<div />} open={isOpen} handler={onClose} className='p-8 w-[500px]' size='lg'>
         <DialogHeader placeholder={<div />} className='uppercase flex items-center gap-2'>
-          <span>Пришлашение для:</span>
+          <span>
+            {" "}
+            {t("dashboard.header.specialists.details.modalCard.invitation")}
+          </span>
           <span className='text-main-green'>{data.first_name}</span>
           <span className='text-main-green'>{data.last_name}</span>
         </DialogHeader>
@@ -46,10 +51,12 @@ function SendModal({ data, isOpen, onClose = true }) {
         <DialogBody placeholder={<div />}>
           <div className='flex flex-col '>
             <span className='text-custom-gray font-gilroy-bold' >
-              Напишите письмо
+              {t("dashboard.header.specialists.details.modalCard.write_letter")}
             </span>
             <textarea
-              placeholder='Комментарий'
+              placeholder={t(
+                "dashboard.header.specialists.details.modalCard.input_placeholder"
+              )}
               className={`bg-gray-50 text-gray-900 text-sm rounded-lg border border-gray-50 outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-3.5`}
               rows={4}
               ref={text_ref}
@@ -67,14 +74,18 @@ function SendModal({ data, isOpen, onClose = true }) {
             onClick={onClose}
             className='w-full md:w-auto md:mr-1 bg-gray-800 text-white text-xs py-5 px-10 rounded-md hover:bg-gray-700 '
           >
-            Отменить
+            {t(
+              "dashboard.header.specialists.details.modalCard.cancel_button_text"
+            )}
           </Button>
           <Button
             placeholder={<div />}
             onClick={replyHandler}
             className='w-full md:w-auto bg-main-green text-white text-xs py-5 px-10 rounded-md hover:opacity-55'
           >
-            Отправить
+            {t(
+              "dashboard.header.specialists.details.modalCard.send_button_text"
+            )}
           </Button>
         </DialogFooter>
       </Dialog>

@@ -1,8 +1,10 @@
 import React, { Fragment, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, Transition } from '@headlessui/react';
 
 function DeleteItem(props) {
     const { account = false } = props;
+    const { t } = useTranslation();
     const cancelButtonRef = useRef(null);
 
     return (
@@ -37,11 +39,14 @@ function DeleteItem(props) {
                                     </div>
                                     <div className="mt-0 ml-4 text-left text-txt_color-slate">
                                         <Dialog.Title as="h3" className="text-sm sm:text-base font-normal leading-2">
-                                            Удалить {account ? "аккаунт" : "элемент"}
+                                            {t("extraComponents.deleteModal.delete_text")}{" "}
+                                            {account
+                                                ? t("extraComponents.deleteModal.delete_type_one")
+                                                : t("extraComponents.deleteModal.delete_type_two")}
                                         </Dialog.Title>
                                         <div className="mt-0 sm:mt-2">
                                             <p className="text-xs text-gray-500">
-                                                Вы уверены, что хотите удалить?
+                                                {t("extraComponents.deleteModal.confirm_text")}
                                             </p>
                                         </div>
                                     </div>
@@ -52,14 +57,14 @@ function DeleteItem(props) {
                                         className={`bg-red-700 hover:bg-red-600 focus:ring-red-600 text-white text-[12px] px-2 py-1 rounded-md`}
                                         onClick={props.deleteItemHandler}
                                     >
-                                        Удалить
+                                        {t("extraComponents.deleteModal.delete_button_text")}
                                     </button>
                                     <button
                                         type="button"
                                         className={`bg-gray-700 hover:bg-gray-600 focus:ring-gray-600 text-white text-[12px] px-2 py-1 rounded-md`}
                                         onClick={props.closeModal}
                                     >
-                                        Отменить
+                                        {t("extraComponents.deleteModal.cancel_button_text")}
                                     </button>
                                 </div>
                             </Dialog.Panel>

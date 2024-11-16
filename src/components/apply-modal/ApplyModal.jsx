@@ -1,6 +1,4 @@
-// react-core
-
-// material-tailwind
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Dialog,
@@ -10,6 +8,8 @@ import {
 } from '@material-tailwind/react';
 
 function ApplyModal({ data, isOpen, onClose }) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Dialog placeholder={<div />} open={isOpen} handler={onClose}>
@@ -21,7 +21,7 @@ function ApplyModal({ data, isOpen, onClose }) {
         <hr />
 
         <div className='flex flex-wrap gap-2 p-4'>
-          {data.technologies.map((tech) => (
+          {data.technologies?.length > 0 && data.technologies.map(tech => (
             <Button
               key={tech}
               placeholder={<div />}
@@ -34,11 +34,13 @@ function ApplyModal({ data, isOpen, onClose }) {
         </div>
         <DialogBody placeholder={<div />}>
           <div className='flex flex-col '>
-            <label className='text-custom-gray font-gilroy-bold' htmlFor=''>
-              Напишите письмо
+            <label className='text-custom-gray font-gilroy-bold' htmlFor='dialogBodyLabel'>
+              {t("extraComponents.allProjectDetails.write_letter")}
             </label>
             <textarea
-              placeholder='Комментарий'
+              placeholder={t(
+                "extraComponents.allProjectDetails.write_letter_input_placeholder"
+              )}
               className='textarea bg-gray-50 p-2 textarea-bordered'
               rows={4}
             />
@@ -55,14 +57,14 @@ function ApplyModal({ data, isOpen, onClose }) {
             onClick={onClose}
             className='w-full md:w-auto md:mr-1 bg-gray-800 text-white text-sm px-10 py-4 rounded-md hover:bg-gray-700'
           >
-            Отмена
+            {t("extraComponents.allProjectDetails.cancel_button_text")}
           </Button>
           <Button
             placeholder={<div />}
             onClick={onClose}
             className='w-full md:w-auto bg-main-green text-white text-sm px-9 py-4 rounded-md hover:opacity-55'
           >
-            Отправить
+            {t("extraComponents.allProjectDetails.send_button_text")}
           </Button>
         </DialogFooter>
       </Dialog>

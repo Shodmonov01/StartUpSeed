@@ -125,6 +125,9 @@ const projectReducer = createSlice({
         isLoading: (state, action) => {
             state.loading = action.payload
         },
+        updateOneProject: (state, action) => {
+            state.allProjects = action.payload;
+        },
     },
     // extra reducer
     extraReducers: (builder) => {
@@ -176,5 +179,5 @@ const projectReducer = createSlice({
     }
 });
 
-export const { isLoading } = projectReducer.actions;
+export const { isLoading, updateOneProject } = projectReducer.actions;
 export default projectReducer;

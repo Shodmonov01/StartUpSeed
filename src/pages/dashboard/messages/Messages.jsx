@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import { useTranslation } from 'react-i18next';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { FiSearch, FiArrowLeftCircle } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -12,10 +13,13 @@ import { errorHandler, getToastWarn } from '../../../utils/options';
 import { axiosInstances } from '../../../config/config';
 import Msg from './components/Msg';
 import { getProfile } from '../../../redux/reducers/profileReducer';
+import { useAuth } from '../../../services/useAuth';
 import userImg from '../../../assets/images/user.jpg';
 
 const Messages = (props) => {
   const { state } = useLocation();
+  const { t } = useTranslation();
+  const { user_id } = useAuth();
   const cookie = new Cookies();
   const [selectedUser, setSelectedUser] = useState({});
   const [users, setUsers] = useState([]);
@@ -23,15 +27,12 @@ const Messages = (props) => {
   const email_ref = useRef();
   const message_ref = useRef();
 
-  // console.log(state);
-
   // working socket
   useEffect(() => {
     if (socket) {
       socket.onopen = () => {
         // console.log("WebSocket Client Connected");
       };
-
       socket.onmessage = msg => {
         let resultMsg = selectedUser.messages;
         resultMsg.push(JSON.parse(msg.data));
@@ -55,7 +56,7 @@ const Messages = (props) => {
             if (res.status === 200 || res.status === 201) {
               const response = await axiosInstances.get(`/chat/rooms/`, { signal });
               setUsers(response.data);
-            } getToastWarn(res.data || res.data?.message || "Не найдено.");
+            } getToastWarn(res.data || res.data?.message || t("toastMessage.messagesPage.not_found"));
           } catch (error) {
             errorHandler(error);
           }
@@ -123,7 +124,7 @@ const Messages = (props) => {
               errorHandler(error);
             }
           }
-        } getToastWarn(res.data || res.data?.message || "Не найдено.");
+        } getToastWarn(res.data || res.data?.message || t("toastMessage.messagesPage.not_found"));
       } catch (error) {
         errorHandler(error);
       }
@@ -153,6 +154,7 @@ const Messages = (props) => {
           msg.send(
             JSON.stringify({
               message: message_ref.current.value,
+              info: ""
             })
           );
           message_ref.current.value = "";
@@ -171,8 +173,6 @@ const Messages = (props) => {
     setSelectedUser({});
   }
 
-  // console.log(selectedUser);
-
   return (
     <div className='h-screen p-0 lg:p-4 w-full lg:max-w-5xl mx-auto my-4 lg:my-10 grid grid-cols-7 gap-4'>
       <div className={`relative max-h-screen col-span-7 lg:col-span-3 bg-white rounded-lg shadow p-2 lg:p-4 ${selectedUser.hasOwnProperty('id') ? 'hidden lg:block' : 'block lg:block'}`}>
@@ -181,7 +181,9 @@ const Messages = (props) => {
             <FiSearch className='text-gray-500 mr-2' />
             <input
               type='text'
-              placeholder='Поиск чата'
+              placeholder={t(
+                "dashboard.messages.search_chat_input_placeholder"
+              )}
               className='bg-transparent flex-1 outline-none'
               ref={email_ref}
             />
@@ -193,7 +195,7 @@ const Messages = (props) => {
         <div className='flex border-b py-3 justify-between items-center mb-4'>
           <div className='flex items-center'>
             <span className='font-gilroy-bold text-gray-400 text-lg'>
-              Все Сообщения
+              {t("dashboard.messages.all_messages")}
             </span>
             <IoIosArrowDown className='ml-2 text-gray-400 ' />
           </div>
@@ -212,35 +214,37 @@ const Messages = (props) => {
       {/* messages */}
       {selectedUser.hasOwnProperty("id") && (
         <div className={`max-h-screen col-span-7 lg:col-span-4 bg-white rounded-lg shadow ${selectedUser.hasOwnProperty('id') ? 'flex' : 'hidden'} lg:flex flex-col relative`}>
-          <div className='flex justify-between p-2 lg:p-4 px-6 items-center border-b-[3px] w-[90%] mx-auto'>
+          <div className='flex justify-between p-2 lg:p-4 px-6 items-center w-[90%] mx-auto border-b-[3px]'>
             <div className='flex items-center w-full'>
               <FiArrowLeftCircle className='cursor-pointer mr-4 block lg:hidden' size={25} onClick={backToChat} />
               {state && state.project && state.receiver?.id === selectedUser?.receiver?.id ? (
                 <img
                   src={state.project?.project_image ? state.project.project_image : userImg}
                   alt='Contact Name'
-                  className='rounded-full w-10 lg:w-12 h-10 lg:h-12 mr-3'
+                  className='rounded-full w-10 lg:w-12 h-10 lg:h-12 mr-1'
                 />
               ) : (
                 <img
                   src={selectedUser?.receiver?.avatar ? selectedUser.receiver.avatar : userImg}
                   alt='Contact Name'
-                  className='rounded-full w-10 lg:w-12 h-10 lg:h-12 mr-3'
+                  className='rounded-full w-10 lg:w-12 h-10 lg:h-12 mr-1'
                 />
               )}
               <div className='text-xs lg:text-[15px]'>
                 {selectedUser?.receiver?.id !== props.profileData.id ? (
-                  <h5>
+                  <span className='font-gilroy_semibold text-[14px]'>
                     {state && state.project && state.receiver?.id === selectedUser?.receiver?.id ? (
                       <>
-                        Проект: {state.project?.name}
+                        {/* Проект: {state.project?.name} */}
+                        {/* {t("dashboard.messages.project_text")}{" "} */}
+                        {state.project?.first_name} {state.project?.last_name}
                       </>
                     ) : (
                       <>
                         {selectedUser.receiver?.first_name} {selectedUser.receiver?.last_name}
                       </>
                     )}
-                  </h5>
+                  </span>
                 ) : (
                   <h5>
                     {selectedUser.initiator?.first_name} {selectedUser.initiator?.last_name} 1
@@ -261,8 +265,8 @@ const Messages = (props) => {
           </div>
 
           {/* all messages */}
-          <div className='p-0 lg:p-4 flex flex-col justify-end absolute top-[70px] left-0 right-0 bottom-[70px] lg:bottom-[60px]'>
-            <div className='overflow-y-scroll p-2'>
+          <div className='p-0 lg:p-4 pt-0 flex flex-col justify-end absolute top-[56px] left-0 right-0 bottom-[70px] lg:bottom-[40px]'>
+            <div className='p-2'>
               <Msg
                 data={selectedUser}
                 profileData={props.profileData}
@@ -272,6 +276,89 @@ const Messages = (props) => {
 
 
           {selectedUser && selectedUser?.messages?.length > 0 ? (
+            state && state.hasOwnProperty('state') && state.state.hasOwnProperty('owner') && state.state.owner?.id == user_id && selectedUser.receiver?.id == state.receiver?.id ? (
+              <div className='flex p-2 border-gray-300 border items-center absolute bottom-0 left-0 right-0 rounded-lg m-2'>
+                <input
+                  type='text'
+                  placeholder={t(
+                    "dashboard.messages.enter_message_input_placeholder"
+                  )}
+                  className='flex-1 bg-white p-2 outline-none mr-2 py-0'
+                  onKeyDown={enterClickHandler}
+                  ref={message_ref}
+                  defaultValue={state ? state.text : ""}
+                  autoFocus={true}
+                />
+
+                <button
+                  type='button'
+                  onClick={sendMessage}
+                  className='text-gray-400 p-2 text-2xl rounded-full'
+                >
+                  <IoSend />
+                </button>
+              </div>
+            ) : (
+              (typeof selectedUser.messages[selectedUser.messages?.length - 1]?.sender === "object" ? selectedUser.messages[selectedUser.messages?.length - 1]?.sender?.id != props.profileData?.id : selectedUser.messages[selectedUser.messages?.length - 1]?.sender != props.profileData?.id) ? (
+                <div className='flex p-2 border-gray-300 border items-center absolute bottom-0 left-0 right-0 rounded-lg m-2'>
+                  <input
+                    type='text'
+                    placeholder={t(
+                      "dashboard.messages.enter_message_input_placeholder"
+                    )}
+                    className='flex-1 bg-white p-2 outline-none mr-2 py-0'
+                    onKeyDown={enterClickHandler}
+                    ref={message_ref}
+                    defaultValue={state ? state.text : ""}
+                    autoFocus={true}
+                  />
+
+                  <button
+                    type='button'
+                    onClick={sendMessage}
+                    className='text-gray-400 p-2 text-2xl rounded-full'
+                  >
+                    <IoSend />
+                  </button>
+                </div>
+              ) : (
+                <div className='flex p-2 border border-t-[1px] items-center absolute bottom-0 left-0 right-0 rounded-lg m-2'>
+                  <div
+                    placeholder={t("dashboard.messages.alert_text")}
+                    className='flex-1 bg-transparent outline-none mr-2 text-center text-gray-500 text-[12px] break-words whitespace-normal py-0 md:py-2'
+                    disabled={true}
+                    title={t("dashboard.messages.alert_text")}
+                  >
+                    {t("dashboard.messages.alert_text")}
+                  </div>
+                </div>
+              )
+            )
+          ) : (
+            <div className='flex p-2 border-gray-300 border items-center absolute bottom-0 left-0 right-0 rounded-lg m-2'>
+              <input
+                type='text'
+                placeholder={t(
+                  "dashboard.messages.enter_message_input_placeholder"
+                )}
+                className='flex-1 bg-white p-2 outline-none mr-2 py-0'
+                onKeyDown={enterClickHandler}
+                ref={message_ref}
+                defaultValue={state ? state.text : ""}
+                autoFocus={true}
+              />
+
+              <button
+                type='button'
+                onClick={sendMessage}
+                className='text-gray-400 p-2 text-2xl rounded-full'
+              >
+                <IoSend />
+              </button>
+            </div>
+          )}
+
+          {/* {selectedUser && selectedUser?.messages?.length > 0 ? (
             (typeof selectedUser.messages[selectedUser.messages?.length - 1]?.sender === "object" ? selectedUser.messages[selectedUser.messages?.length - 1]?.sender?.id != props.profileData?.id : selectedUser.messages[selectedUser.messages?.length - 1]?.sender != props.profileData?.id) ? (
               <div className='flex p-2 border-gray-300 border items-center absolute bottom-0 left-0 right-0 rounded-lg m-2'>
                 <input
@@ -324,11 +411,12 @@ const Messages = (props) => {
                 <IoSend />
               </button>
             </div>
-          )}
+          )} */}
         </div>
-      )}
+      )
+      }
       {/* messages */}
-    </div>
+    </div >
   );
 };
 

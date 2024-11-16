@@ -2,20 +2,23 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 // react-router-dom
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // react-icons
 import { IoEye } from 'react-icons/io5';
 import { IoMdEyeOff } from 'react-icons/io';
+import { MdClose } from 'react-icons/md';
 import { getToast, getToastError, getToastWarn } from '../../utils/options';
 import { axiosInstances } from '../../config/config';
 import { onLogin } from '../../redux/reducers/rootReducer';
-import { MdClose } from 'react-icons/md';
 // import { encode } from 'string-encode-decode';
 // import { register } from '../../services/auth';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { t } = useTranslation();
+  const {state} = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
@@ -35,68 +38,68 @@ const Register = () => {
 
     if (!(data.password?.length < 8)) {
       if (data.password === data.repeat_password) {
-
         try {
           const res = await axiosInstances.post("/register/", obj);
-          // console.log(res);
-
-          if (res.status === 201) {
+          if (res.status === 201 || res.status == 200 || res.status == 204) {
             if (res.data?.access) {
-              getToast("Ваша информация успешно сохранена.");
+              getToast(t("toastMessage.registerPage.your_information_saved"));
               navigate("/login");
             }
-          } else getToastWarn(res.data?.message || "Xatolik yuz berdi.")
+          } else getToastWarn(
+            res.data?.message || t("toastMessage.registerPage.error_occured")
+          );
         } catch (error) {
-          // console.log(error);
-          if (Array.isArray(error?.response?.data)) {
-            let keys = Object.keys(error?.response?.data);
-            if (Object.values(error?.response?.data)?.length > 0) {
-              Object.values(error?.response?.data).forEach((item, index) => {
-                if (Array.isArray(item) && item?.length > 0) {
-                  item.map(el => {
-                    getToastError(keys[index] + ": " + el);
-                  })
-                } else {
-                  getToastError(keys[index] + ": " + item);
-                }
-              })
-            }
-          } else getToastWarn("На сервере произошла ошибка.");
+          // if (Array.isArray(error?.response?.data)) {
+          let keys = Object.keys(error?.response?.data);
+          if (Object.values(error?.response?.data)?.length > 0) {
+            Object.values(error?.response?.data).forEach((item, index) => {
+              if (Array.isArray(item) && item?.length > 0) {
+                item.map(el => {
+                  getToastError(keys[index] + ": " + el);
+                })
+              } else {
+                getToastError(keys[index] + ": " + item);
+              }
+            })
+          }
+          // } else getToastWarn(t("toastMessage.registerPage.server_problem"));
         }
-      } else getToastWarn("Пароль был введен неверно.");
-    } else getToastWarn("Пароль должен быть длиной не менее 8 символов");
+      } else getToastWarn(t("toastMessage.registerPage.password_incorrect"));
+    } else getToastWarn(t("toastMessage.registerPage.password_validation"));
   };
 
   return (
     <div className='flex items-center justify-center h-[100vh] bg-black m-auto relative'>
       <div className='flex flex-col w-full md:max-w-xl'>
         <h1 className='lg:text-4xl text-xl text-text-main_green font-gunterz text-center'>
-          Регистрация
+          {t("register.title")}
         </h1>
         <form onSubmit={handleSubmit(data => submitHandler(data))} className='flex text-white flex-col px-6 pt-6 w-full '>
           <input
             className={`bg-input_color outline-none border w-full py-4 px-4 rounded mb-4 ${errors.name ? "border-red-700" : "border-input_color"}`}
             type='text'
-            placeholder='Имя'
+            placeholder={t("register.firstname_input_placeholder")}
+            defaultValue={state && state.hasOwnProperty("name") ? state?.name : ""}
             {...register('name', { required: true, maxLength: 50 })}
           />
           <input
             className={`bg-input_color outline-none border w-full py-4 px-4 rounded mb-4 ${errors.lastname ? "border-red-700" : "border-input_color"}`}
             type='text'
-            placeholder='Фамилия'
+            placeholder={t("register.lastname_input_placeholder")}
             {...register('lastname', { required: true, maxLength: 50 })}
           />
           <input
             className={`bg-input_color outline-none border w-full py-4 px-4 rounded mb-4 ${errors.email ? "border-red-700" : "border-input_color"}`}
             type='email'
-            placeholder='Email'
+            placeholder={t("register.email_input_placeholder")}
+            defaultValue={state && state.hasOwnProperty("email") ? state?.email : ""}
             {...register('email', { required: true })}
           />
           <div className='flex items-center rounded-md bg-input_color relative'>
             <input
               type={showPassword ? 'text' : 'password'}
               className={`bg-input_color outline-none border w-full py-4 px-4 pr-8 rounded ${errors.password ? "border-red-700" : "border-input_color"}`}
-              placeholder='Пароль'
+              placeholder={t("register.password_input_placeholder")}
               {...register('password', {
                 required: true
               })}
@@ -113,7 +116,7 @@ const Register = () => {
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               className={`bg-input_color outline-none border w-full py-4 px-4 pr-8 rounded ${errors.repeat_password ? "border-red-700" : "border-input_color"}`}
-              placeholder='Повтор пароля'
+              placeholder={t("register.password_repeat_input_placeholder")}
               {...register('repeat_password', { required: true })}
             />
             <button
@@ -128,11 +131,14 @@ const Register = () => {
             type='submit'
             className='bg-text-main_green mt-4 p-3 rounded-md font-gilroy-bold text-white'
           >
-            Зарегистрироваться
+            {t("register.button_text")}
           </button>
           <Link to={'/login'}>
             <h1 className='text-white text-center my-4 font-gilroy-bold text-sm'>
-              Есть аккаунт? <span className='text-text-main_green'>Войдите</span>
+              {t("register.have_account")}{" "}
+              <span className="text-text-main_green">
+                {t("register.sign_in")}
+              </span>
             </h1>
           </Link>
         </form>

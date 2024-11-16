@@ -1,8 +1,10 @@
 import React, { memo, useCallback, useState } from 'react';
-import Modal from '../../../../../components/modal/Modal';
+import { useTranslation } from 'react-i18next';
 import CodeModal from './CodeModal';
+import Modal from '../../../../../components/modal/Modal';
 
 function Email({ data, getData }) {
+    const { t } = useTranslation();
     const [openCodeModal, setOpenCodeModal] = useState({ open: false, data: {} });
 
     // open add unit modal
@@ -20,13 +22,13 @@ function Email({ data, getData }) {
             <div className='flex items-end gap-4'>
                 <div className='w-full'>
                     <span className='block font-gilroy text-sm font-bold mb-2'>
-                        E-mail
+                        {t("dashboard.settings.email_input_label")}
                     </span>
                     <input className='appearance-none bg-custom-light rounded-md w-full p-3.5 text-gray-700 leading-tight focus:outline-none'
                         id="email"
                         name="emails"
                         type="email"
-                        placeholder="Yourmail@mail.ru"
+                        placeholder={t("dashboard.settings.email_input_placeholder")}
                         defaultValue={data ? data.email : ""}
                         disabled
                         required
@@ -37,8 +39,7 @@ function Email({ data, getData }) {
                     className='bg-custom-gray hover:bg-gray-900 text-white font-gilroy p-3 rounded-md focus:outline-none focus:shadow-outline text-]13px] lg:text-[15px]'
                     onClick={() => openCodeModalHandler("item")}
                 >
-                    {/* Сохранить */}
-                    Изменить
+                    {t("dashboard.settings.email_input_button")}
                 </button>
             </div>
 

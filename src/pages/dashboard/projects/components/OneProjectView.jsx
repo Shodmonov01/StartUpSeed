@@ -1,9 +1,12 @@
 import React, { memo, useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import OneProjectData from './OneProjectData';
 import ReplyForm from './ReplyForm';
 import Modal from '../../../../components/modal/Modal';
 import { useAuth } from '../../../../services/useAuth';
+import { axiosInstances } from '../../../../config/config';
+import { getToast, getToastError, getToastWarn } from '../../../../utils/options';
 // import { errorHandler, getToast, getToastWarn } from '../../../../utils/options';
 // import { axiosInstances } from '../../../../config/config';
 // import { IoStarOutline } from 'react-icons/io5';
@@ -12,13 +15,13 @@ import { useAuth } from '../../../../services/useAuth';
 
 function OneProjectView(props) {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { state } = useLocation();
     let { user_id } = useAuth();
     const [openReplyModal, setOpenReplyModal] = useState({ open: false, data: {} });
 
     // console.log(state);
     // console.log(user_id);
-
 
     // open add unit modal
     const openReplyModalHandler = useCallback((value, fullState) => {
@@ -49,21 +52,33 @@ function OneProjectView(props) {
     // }
 
     // reply handler
-    const replyHandler = value => {
-        let obj = {
-            receiver: state?.owner,
-            senderId: user_id,
-            text: value.description,
-            project: state
+    const replyHandler = async value => {
+        // let obj = {
+        //     receiver: state?.owner,
+        //     senderId: user_id,
+        //     text: value.description,
+        //     project: state
+        // }
+        // navigate("/admin/messages", { state: obj });
+
+        try {
+            const res = await axiosInstances.post("/reply/project/", value);
+            if (res.status == 201 || res.status == 200 || res.status == 204) {
+                getToast(t("toastMessage.allProjectsDataPage.delete_success"));
+                closeReplyModalHandler();
+            } else getToastWarn(res?.message || res.data?.message || "Произошла ошибка.");
+        } catch (error) {
+            getToastError(error?.message || "На сервере произошла ошибка.");
         }
-        navigate("/admin/messages", { state: obj });
     }
 
     return (
         <>
             <div className='max-w-5xl mx-auto my-10'>
                 <div className='mb-6'>
-                    <span className='font-gunterz lg:text-2xl text-xl text-custom-gray lg:text-left text-center block'>ПРОЕКТЫ</span>
+                    <span className='font-gunterz lg:text-2xl text-xl text-custom-gray lg:text-left text-center block'>
+                        {t("dashboard.pages.one_project_view.title")}
+                    </span>
                 </div>
 
                 <div className='flex items-center justify-between relative'>
@@ -91,7 +106,7 @@ function OneProjectView(props) {
 
                 <div className='my-14 flex flex-col gap-2'>
                     <h2 className='text-xl lg:text-2xl text-custom-gray font-gunterz lg:text-left text-center'>
-                        Открытые позиции
+                        {t("dashboard.pages.one_project_view.open_position")}
                     </h2>
                     <OneProjectData
                         state={state}

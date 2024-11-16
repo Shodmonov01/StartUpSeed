@@ -1,15 +1,17 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
+import ProfessionalInfoData from './ProfessionalInfoData';
+import ProfessionalInfoForm from './ProfessionalInfoForm';
 import { getProfessioanalInformation } from '../../../../redux/reducers/profileReducer';
 import { errorHandler, getToast } from '../../../../utils/options';
 import { axiosInstances } from '../../../../config/config';
-import ProfessionalInfoData from './ProfessionalInfoData';
-import ProfessionalInfoForm from './ProfessionalInfoForm';
 
 function ProfessionalInfo(props) {
     const { professionalInfo } = props;
+    const { t } = useTranslation();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(0);
@@ -56,7 +58,7 @@ function ProfessionalInfo(props) {
         try {
             const res = await axiosInstances.post("/professional/information/", obj);
             if (res.status) {
-                getToast("Успешно сохранено.");
+                getToast(t("toastMessage.professionalInfoPage.saved_success"));
                 reset();
                 setLoading(false);
                 getData();
@@ -91,7 +93,7 @@ function ProfessionalInfo(props) {
                             {index + 1 === professionalInfo.length && (
                                 <div className="dark:text-white text-xs flex flex-col gap-1 p-2 px-1 lg:px-2 py-4">
                                     <span className='text-[20px] lg:text-[24px] font-medium text-custom-gray mb-8 lg:text-left text-center'>
-                                        Профессиональная информация
+                                        {t("dashboard.profile.professional_information.title")}
                                     </span>
                                     <ProfessionalInfoForm
                                         handleProfessionalInformation={handleProfessionalInformation}
@@ -108,7 +110,7 @@ function ProfessionalInfo(props) {
                     )) : (
                         <div className="dark:text-white text-xs flex flex-col gap-1 p-2 px-1 lg:px-2 py-4">
                             <span className='text-[20px] lg:text-[24px] font-medium text-custom-gray mb-8 lg:text-left text-center'>
-                                Профессиональная информация
+                                {t("dashboard.profile.professional_information.title")}
                             </span>
                             <ProfessionalInfoForm
                                 handleProfessionalInformation={handleProfessionalInformation}

@@ -1,11 +1,13 @@
 import React, { memo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { axiosInstances } from '../../../../config/config';
 import { errorHandler, getToast } from '../../../../utils/options';
 import { deleteOneExperience } from '../../../../redux/reducers/profileReducer';
 
 function ExperienceData(props) {
     const { item, index, getData } = props;
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const start_date_ref = useRef();
     const end_date_ref = useRef();
@@ -27,7 +29,7 @@ function ExperienceData(props) {
         try {
             const res = await axiosInstances.put(`/experience/${item.id}/`, obj);
             if (res.status) {
-                getToast("Изменено успешно.");
+                getToast(t("toastMessage.experienceDataPage.edit_success"));
                 setLoading(false);
                 getData();
             }
@@ -49,33 +51,37 @@ function ExperienceData(props) {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Должность работы
+                        {t("extraComponents.experienceData.job_title_input_label")}
                     </span>
                     <input
                         className='appearance-none rounded w-full p-3 bg-custom-light text-gray-700 leading-tight focus:outline-none focus:shadow-outline position'
                         name='position_experience_update'
                         type='text'
-                        placeholder='Программист'
+                        placeholder={t(
+                            "extraComponents.experienceData.job_title_input_placeholder"
+                        )}
                         defaultValue={item?.job_title}
                         autoComplete='true'
                     />
                 </div>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Компания
+                        {t("extraComponents.experienceData.company_input_label")}
                     </span>
                     <input
                         className='appearance-none rounded w-full p-3 bg-custom-light text-gray-700 leading-tight focus:outline-none focus:shadow-outline company'
                         name='company_experience_update'
                         type='text'
-                        placeholder='Usertech'
+                        placeholder={t(
+                            "extraComponents.experienceData.company_input_placeholder"
+                        )}
                         defaultValue={item?.company}
                         autoComplete='true'
                     />
                 </div>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Начало работы
+                        {t("extraComponents.experienceData.start_work_time_label")}
                     </span>
                     <input
                         type="date"
@@ -90,7 +96,7 @@ function ExperienceData(props) {
                 </div>
                 <div>
                     <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                        Окончание работы
+                        {t("extraComponents.experienceData.finish_work_time_label")}
                     </span>
                     <input
                         type="date"
@@ -113,7 +119,7 @@ function ExperienceData(props) {
                             />
                             <span className="checkmark"></span>
                             <span className='pl-6 text-sm text-gray-700'>
-                                По настоящее время
+                                {t("extraComponents.experienceData.present_time_input_label")}
                             </span>
                         </label>
                     </div>
@@ -121,12 +127,14 @@ function ExperienceData(props) {
             </div>
             <div className='mt-6'>
                 <span className='block mb-2 text-[13px] lg:text-sm font-bold text-custom-gray'>
-                    Ваши достижения
+                    {t("extraComponents.experienceData.your_achievements_input_label")}
                 </span>
                 <textarea
                     className='bg-custom-light appearance-none rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline achievements'
                     name='achievements_experience_update'
-                    placeholder='Осуществлял руководство проектом по внедрению электронного документооборота на базе DocsVision ver. 5.0.'
+                    placeholder={t(
+                        "extraComponents.experienceData.your_achievements_input_placeholder"
+                    )}
                     rows={5}
                     defaultValue={item?.achievement}
                     autoComplete='true'
@@ -138,7 +146,7 @@ function ExperienceData(props) {
                     className='text-white col-span-1 bg-custom-gray border-1 border-custom-gray hover:border-gray-500 transition-all hover:bg-gray-500 hover:text-white font-gilroy-bold p-3 px-[35px] text-[13px] rounded focus:outline-none focus:shadow-outline'
                     onClick={() => deleteItem(item)}
                 >
-                    Удалить
+                    {t("extraComponents.experienceData.delete_button_text")}
                 </button>
                 <button
                     type='submit'
@@ -146,7 +154,7 @@ function ExperienceData(props) {
                     disabled={loading}
                     onClick={() => handleExperienceData(index)}
                 >
-                    Сохранить
+                    {t("extraComponents.experienceData.save_button_text")}
                 </button>
             </div>
 

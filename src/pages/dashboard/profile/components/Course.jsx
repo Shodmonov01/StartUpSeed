@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
 import CourseData from './CourseData';
 import { errorHandler, getToast } from '../../../../utils/options';
@@ -10,6 +11,7 @@ import CourseForm from './CourseForm';
 
 function Course(props) {
     const { allCourses } = props;
+    const { t } = useTranslation();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(0);
@@ -50,7 +52,7 @@ function Course(props) {
         try {
             const res = await axiosInstances.post("/course/", obj);
             if (res.status) {
-                getToast("Успешно сохранено.");
+                getToast(t("toastMessage.coursePage.saved_success"));
                 reset();
                 setLoading(false);
                 getData();
@@ -88,7 +90,7 @@ function Course(props) {
 
                 <div className="dark:text-white text-xs flex flex-col gap-1 p-2 px-1 lg:px-2 py-4">
                     <span className='text-[20px] lg:text-[24px] font-medium text-custom-gray mb-8 lg:text-left text-center'>
-                        Курсы и повышение квалификации
+                        {t("dashboard.profile.courses_training.title")}
                     </span>
                     <CourseForm
                         handleSubmitCourse={handleSubmitCourse}

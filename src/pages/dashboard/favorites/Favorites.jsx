@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-tailwind/react';
 import Details from './components/Details';
 import { deleteOneFavorite, getAllFavorites, isLoading } from '../../../redux/reducers/projectReducer';
 
 const Favorites = (props) => {
+  const { t } = useTranslation();
 
   // get favorites
   useEffect(() => {
@@ -18,7 +20,6 @@ const Favorites = (props) => {
 
   // delete favorite
   const deleteItem = value => {
-    // console.log(value);
     props.onDeleteOneFavorite({ item: value });
   }
 
@@ -59,13 +60,15 @@ const Favorites = (props) => {
             {props.allSelfProjects?.length === 0 ? (
               <div className=''>
                 <h2 className='text-xl lg:text-2xl text-custom-gray font-gunterz mb-5'>
-                  У вас нету активных избранное
+                  {t("dashboard.featured.not_data")}
                 </h2>
               </div>
             ) : (
               <div>
                 <div className='mb-6'>
-                  <span className='font-gunterz text-xl lg:text-2xl text-custom-gray lg:text-left text-center block'>Избранное</span>
+                  <span className='font-gunterz text-xl lg:text-2xl text-custom-gray lg:text-left text-center block'>
+                    {t("dashboard.featured.title")}
+                  </span>
                 </div>
                 <Details
                   data={props.allFavorites}

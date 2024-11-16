@@ -15,13 +15,25 @@ module.exports = withMT({
         'text-main_green': '#B7ED1D'
       },
       fontFamily: {
-        gilroy: ["Gilroy"],
+        gilroy: ["GilroyRegular"],
+        gilroy_medium: ["GilroyMedium"],
+        gilroy_semibold: ["GilroySemiBold"],
+        gilroy_bold: ["GilroyBold"],
         gunterz: ["Gunterz"],
         montserrat: ["Montserrat"],
       },
       boxShadow: {
         'shadow-bottom': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
       }
+    },
+    screens: {
+      xs: "480px",
+      ss: "620px",
+      sm: "768px",
+      md: "1060px",
+      lg: "1200px",
+      xxl: "1300px",
+      xxxl: "1500px",
     },
   },
   plugins: [],

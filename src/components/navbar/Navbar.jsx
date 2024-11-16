@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { BiMenuAltLeft } from 'react-icons/bi';
 import { MdClose } from 'react-icons/md';
+import Language from "../language-dropdown/Language";
 
 const Navbar = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -13,7 +16,7 @@ const Navbar = () => {
   return (
     <nav className='bg-white shadow-md px-2'>
       <div className={`container mx-auto flex items-center justify-between ${isOpen && 'flex-col'} relative`}>
-        <div className={`flex items-end lg:items-center h-[70px] px-2 py-1 ${isOpen && 'flex-row-reverse'}`}>
+        <div className={`flex items-center lg:items-center h-[70px] px-2 py-1 ${isOpen && 'flex-row-reverse'}`}>
           <div className='md:hidden'>
             <button
               onClick={toggleMenu}
@@ -30,6 +33,9 @@ const Navbar = () => {
             </Link>
           </div>
         </div>
+        <div className="block md:hidden">
+          <Language />
+        </div>
 
         {isOpen && (
           <MdClose className='text-[22px] text-black absolute top-3 right-1 cursor-pointer transition-all' onClick={toggleMenu} />
@@ -39,56 +45,57 @@ const Navbar = () => {
           <a href='#main'
             className='text-gray-600 hover:text-main-color px-4 py-2 block md:inline'
           >
-            Главная
+            {t("home.header.home")}
           </a>
           <a href='#about'
             className='text-gray-600 hover:text-main-color px-4 py-2 block md:inline'
           >
-            О нас
+            {t("home.header.about")}
           </a>
           <Link
             to='/reviews'
             className='text-gray-600 hover:text-main-color px-4 py-2 block md:inline'
           >
-            Отзывы
+            {t("home.header.reviews")}
           </Link>
           <a href='#forwho'
             className='text-gray-600 hover:text-main-color px-4 py-2 block md:inline'
           >
-            Вопросы
+            {t("home.header.questions")}
           </a>
           <a href='#contact'
             className='text-gray-600 hover:text-main-color px-4 py-2 block md:inline'
           >
-            Контакты
+            {t("home.header.contacts")}
           </a>
           <div className='grid grid-cols-2 gap-2 w-full pb-2 lg:hidden'>
             <Link
               to='/login'
               className='text-gray-600 bg-black rounded-md hover:text-main-color px-4 py-2 col-span-1 w-full'
             >
-              <span className='text-white'>Войти</span>
+              <span className="text-white">{t("home.header.login")}</span>
             </Link>
             <Link
               to='/register'
               className='bg-text-main_green text-white hover:bg-main-green-dark px-4 py-2 rounded-md transition-colors col-span-1 w-full'
             >
-              Регистрация
+              {t("home.header.registration")}
             </Link>
           </div>
         </div>
         <div className='hidden lg:flex gap-5 lg:items-center text-[14px] lg:text-[15px]'>
+          <Language />
           <Link
             to='/login'
             className='text-gray-600 bg-black rounded-[5px] hover:text-main-color px-6 lg:px-8 py-2'
           >
-            <span className='text-white'>Вход</span>
+            <span className="text-white">{t("home.header.entrance")}</span>
           </Link>
           <Link
             to='/register'
             className='bg-text-main_green text-white hover:bg-main-green-dark px-[6] lg:px-8 py-2 rounded-[5px] transition-colors'
           >
-            Регистрация
+            {t("home.header.registration")}
           </Link>
         </div>
       </div>

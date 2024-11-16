@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Cookies from "universal-cookie";
+import { useTranslation } from 'react-i18next';
 // import { Switch } from '@material-tailwind/react';
 //react icons
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { BiSolidHomeCircle } from 'react-icons/bi';
 // material tailwind
 import { onExit } from '../../redux/reducers/rootReducer';
 import { getProfile } from '../../redux/reducers/profileReducer';
@@ -20,11 +22,13 @@ import messageIcon from '../../assets/images/message.svg';
 import starIcon from '../../assets/images/star-icon.svg';
 import settingsIcon from '../../assets/images/settings-icon.svg';
 import doorIcon from '../../assets/images/door-icon.svg';
-import { BiSolidHomeCircle } from 'react-icons/bi';
+import pen from '../../assets/pen.svg';
+import LanguageSelector from '../language-dropdown/Language';
 
 const DashboardSidebar = (props) => {
   const navigate = useNavigate();
   const cookie = new Cookies();
+  const { t } = useTranslation();
   const [isMobileNavVisible, setMobileNavVisibility] = useState(false);
   const [isDropdownVisible, setDropdownVisibility] = useState(false);
   const toggleDropdown = () => setDropdownVisibility(!isDropdownVisible);
@@ -89,48 +93,53 @@ const DashboardSidebar = (props) => {
             />
           </button>
           <Link to="/admin/pages">
-            <h1 className='text-2xl font-bold text-main-green pr-4 cursor-pointer'>STARTUP SEED</h1>
+            <h1 className='font-montserrat text-text-main_green text-[22px] cursor-pointer'>STARTUP SEED</h1>
           </Link>
         </div>
       )}
-      <div className={`bg-white shadow-lg z-20 p-4 transition-all duration-300 ease-in-out ${isMobileNavVisible ? 'block' : 'hidden'} lg:block`}>
+      <div className={`bg-white shadow-lg z-20 transition-all duration-300 ease-in-out ${isMobileNavVisible ? 'block' : 'hidden'} lg:block`}>
         {/* Sidebar Content */}
-        <div className='flex items-center justify-between gap-2'>
+        <div className='flex items-center justify-between gap-2 mt-6 pl-4 pr-8'>
           <Link to="/admin/pages">
-            <h1 className='text-2xl font-bold text-main-green cursor-pointer'>STARTUP SEED</h1>
+            <h1 className='font-montserrat text-text-main_green text-[22px] cursor-pointer'>STARTUP SEED</h1>
           </Link>
           <span className='text-3xl block lg:hidden cursor-pointer' onClick={() => setMobileNavVisibility(!isMobileNavVisible)}>&times;</span>
         </div>
 
         {/* Navigation and other content goes here */}
-        <nav className={`mt-3 ${isMobileNavVisible ? 'block' : 'hidden'} lg:flex flex-col gap-2`}>
-          <span className='flex items-center font-gilroy-bold px-1 py-2 text-gray-800 pl-[26px] gap-4' >
+        <nav className={`mt-3 ${isMobileNavVisible ? 'block' : 'hidden'} lg:flex flex-col gap-2 font-gilroy_medium text-custom-gray text-[15px] lg:text-[16px]`}>
+          <span className='flex items-center py-2 gap-4 pl-4' >
             <div className={`w-3 h-3 rounded-full animate-pulse ${props.profileData?.active ? 'bg-green-700' : 'bg-red-700'}`}></div>
-            <p className={`font-gilroy-bold text-[14px] ${props.profileData?.active ? 'text-green-700' : 'text-red-700'}`}>{props.profileData?.active ? "Работадатель" : "Соискатель"}</p>
+            <p className={`font-gilroy_semibold text-[14px] ${props.profileData?.active ? 'text-green-700' : 'text-red-700'}`}>
+              {props.profileData?.active
+                ? t("dashboard.sidebarItems.user_type_one")
+                : t("dashboard.sidebarItems.user_type_two")}
+            </p>
           </span>
           <NavLink
             to='/admin/pages'
             onClick={() => setMobileNavVisibility(false)}
             className={({ isActive }) =>
-              isActive ? 'active-link px-4 flex hover:bg-gray-100 hover:text-gray-800' : 'flex px-4 hover:bg-gray-100 hover:text-gray-800'
+              isActive ? 'active-link flex hover:bg-gray-100 hover:text-gray-800 pl-3.5' : 'flex hover:bg-gray-100 hover:text-gray-800 pl-3.5'
             }
           >
             <span
-              className='flex items-center font-gilroy-bold px-1 py-2 text-gray-800'
+              className='flex items-center py-2'
             >
-              {/* <img className='w-5 h-5 mr-3' src={userIcon} alt='no image' /> */}
-              <BiSolidHomeCircle className='text-[23px] mr-3' />
-              <p className='font-gilroy-bold'>Главная</p>
+              <BiSolidHomeCircle className='w-6 h-6 mr-3' />
+              <p className=''>
+                {t("dashboard.sidebarItems.home_link")}
+              </p>
             </span>
           </NavLink>
           <div
-            className='flex items-center px-1 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-800 cursor-pointer'
+            className='flex items-center py-2 hover:bg-gray-100 hover:text-gray-800 cursor-pointer px-4'
             onClick={toggleDropdown}
           >
-            <div className={'px-4 pr-1 flex items-center justify-between w-full'}>
+            <div className={'flex items-center justify-between w-full'}>
               <div className='flex items-center'>
                 <img className='w-5 h-5 mr-3' src={pagesIcon} alt='' />
-                <span>Страницы</span>
+                <span>{t("dashboard.sidebarItems.pages_link")}</span>
               </div>
               <MdOutlineKeyboardArrowDown
                 className={`w-4 h-4 ml-5 ${isDropdownVisible ? 'transform rotate-180' : ''
@@ -139,24 +148,24 @@ const DashboardSidebar = (props) => {
             </div>
           </div>
           {isDropdownVisible && (
-            <div className='flex flex-col'>
+            <div className='flex flex-col '>
               {props.profileData?.active && (
                 <Link
                   onClick={() => setMobileNavVisibility(false)}
                   to={'/admin/create-project'}
-                  className={`flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-200`}
+                  className={`flex items-center py-2 hover:bg-gray-200 px-4`}
                 >
                   <MdOutlineKeyboardArrowRight className='w-4 h-4 mr-2' />
-                  Добавить проект
+                  {t("dashboard.sidebarItems.add_project_link")}
                 </Link>
               )}
               <Link
                 onClick={() => setMobileNavVisibility(false)}
                 to='all-projects'
-                className='flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-200'
+                className='flex items-center py-2 hover:bg-gray-200 px-4'
               >
                 <MdOutlineKeyboardArrowRight className='w-4 h-4 mr-2' />
-                Найти проект
+                {t("dashboard.sidebarItems.search_project_link")}
               </Link>
             </div>
           )}
@@ -165,83 +174,94 @@ const DashboardSidebar = (props) => {
             to='/admin/profile'
             onClick={() => setMobileNavVisibility(false)}
             className={({ isActive }) =>
-              isActive ? 'active-link px-4 flex hover:bg-gray-100 hover:text-gray-800' : 'flex px-4 hover:bg-gray-100 hover:text-gray-800'
+              isActive ? 'active-link flex hover:bg-gray-100 hover:text-gray-800 px-4' : 'flex hover:bg-gray-100 hover:text-gray-800 px-4'
             }
           >
             <span
-              className='flex items-center font-gilroy-bold px-1 py-2 text-gray-800'
+              className='flex items-center py-2 relative'
             >
               <img className='w-5 h-5 mr-3' src={userIcon} alt='no image' />
-              <p className='font-gilroy-bold'>Профиль</p>
+              <p className=''>
+                {t("dashboard.sidebarItems.profile_link")}
+              </p>
+              <img src={pen} alt="no image" className='absolute top-2 -right-5' />
             </span>
           </NavLink>
           {props.profileData?.active && (
             <NavLink
               className={({ isActive }) =>
-                isActive ? 'active-link px-4 flex hover:bg-gray-100 hover:text-gray-800' : 'flex px-4 hover:bg-gray-100 hover:text-gray-800'
+                isActive ? 'active-link flex hover:bg-gray-100 hover:text-gray-800 px-4' : 'flex hover:bg-gray-100 hover:text-gray-800 px-4'
               }
               onClick={() => setMobileNavVisibility(false)}
               to='/admin/projects'
             >
               <span
-                className='flex items-center px-1 py-2 text-gray-800 '
+                className='flex items-center py-2'
               >
                 <img className='w-5 h-5 mr-3' src={projectIcon} alt='' />
-                <p className='font-gilroy-bold'>Мои проекты</p>
+                <p className=''>
+                  {t("dashboard.sidebarItems.my_project_link")}
+                </p>
               </span>
             </NavLink>
           )}
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'active-link px-4 flex hover:bg-gray-100 hover:text-gray-800' : 'flex px-4 hover:bg-gray-100 hover:text-gray-800'
+              isActive ? 'active-link flex hover:bg-gray-100 hover:text-gray-800 px-4' : 'flex hover:bg-gray-100 hover:text-gray-800 px-4'
             }
             onClick={() => setMobileNavVisibility(false)}
             to='/admin/messages'
           >
             <span
-              className='flex items-center px-1 py-2 text-gray-800 '
+              className='flex items-center py-2'
             >
               <img className='w-5 h-5 mr-3' src={messageIcon} />
-              <p className='font-gilroy-bold'>Сообщения</p>
+              <p className=''>
+                {t("dashboard.sidebarItems.messages_link")}
+              </p>
             </span>
           </NavLink>
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'active-link px-4 flex hover:bg-gray-100 hover:text-gray-800' : 'flex px-4 hover:bg-gray-100 hover:text-gray-800'
+              isActive ? 'active-link flex hover:bg-gray-100 hover:text-gray-800 px-4' : 'flex hover:bg-gray-100 hover:text-gray-800 px-4'
             }
             onClick={() => setMobileNavVisibility(false)}
             to='/admin/favorites'
           >
             <span
-              className='flex items-center px-1 py-2 text-gray-800 '
+              className='flex items-center py-2'
             >
               <img src={starIcon} className='w-5 h-5 mr-3' />
-              Избранное
+              {t("dashboard.sidebarItems.favorites_link")}
             </span>
           </NavLink>
           <NavLink
             className={({ isActive }) =>
-              isActive ? 'active-link px-4 flex hover:bg-gray-100 hover:text-gray-800' : 'flex px-4 hover:bg-gray-100 hover:text-gray-800'
+              isActive ? 'active-link flex hover:bg-gray-100 hover:text-gray-800 px-4' : 'flex hover:bg-gray-100 hover:text-gray-800 px-4'
             }
             onClick={() => setMobileNavVisibility(false)}
             to='/admin/settings'
           >
             <span
-              className='flex items-center px-1 py-2 text-gray-800 '
+              className='flex items-center py-2'
             >
               <img src={settingsIcon} className='w-5 h-5 mr-3' />
-              Настройки
+              {t("dashboard.sidebarItems.settings_link")}
             </span>
           </NavLink>
         </nav>
 
-        <div className='flex flex-col gap-4 mt-6 lg:mt-16 cursor-pointer' onClick={onExitHandlerr}>
+        <div className='flex flex-col gap-4 mt-6 lg:mt-16 cursor-pointer px-4' onClick={onExitHandlerr}>
           <span
-            className='mt-auto bg-custom-gray hover:bg-gray-500 text-white font-gilroy py-4 px-8 rounded-lg flex items-center'
+            className='mt-auto bg-custom-gray hover:bg-gray-500 text-white py-4 px-8 rounded-lg flex items-center'
           >
             <img src={doorIcon} className='w-5 h-5 mr-3' />
-            Выйти
+            {t("dashboard.sidebarItems.logout_link")}
           </span>
+        </div>
+
+        <div className='flex items-center justify-center mt-4'>
+          <LanguageSelector classes="w-[85%]" classesOption="" />
         </div>
       </div>
     </>
@@ -258,7 +278,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onExitHandler: (value) => dispatch(onExit(value)),
     onGetProfile: (value) => dispatch(getProfile(value)),
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardSidebar);

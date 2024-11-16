@@ -1,11 +1,13 @@
 import React, { memo, useState } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { errorHandler, getToast } from '../../../../utils/options';
 import { deleteOneAbout } from '../../../../redux/reducers/profileReducer';
 import { axiosInstances } from '../../../../config/config';
 
 function AboutData(props) {
     const { item, index, getData } = props;
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
 
     // professional information
@@ -19,7 +21,7 @@ function AboutData(props) {
         try {
             const res = await axiosInstances.put(`/about/${item.id}/`, obj);
             if (res.status) {
-                getToast("Изменено успешно.");
+                getToast(t("toastMessage.aboutDataPage.edit_success"));
                 setLoading(false);
                 getData();
             }
@@ -54,7 +56,7 @@ function AboutData(props) {
                     className='text-white col-span-1 bg-custom-gray border-1 border-custom-gray hover:border-gray-500 transition-all hover:bg-gray-500 hover:text-white font-gilroy-bold p-3 px-[35px] text-[13px] rounded focus:outline-none focus:shadow-outline'
                     onClick={() => deleteItem(item)}
                 >
-                    Удалить
+                    {t("extraComponents.aboutData.delete_button_text")}
                 </button>
                 <button
                     type='submit'
@@ -62,7 +64,7 @@ function AboutData(props) {
                     disabled={loading}
                     onClick={() => handleAboutData(index)}
                 >
-                    Сохранить
+                    {t("extraComponents.aboutData.save_button_text")}
                 </button>
             </div>
         </div>

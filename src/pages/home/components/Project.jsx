@@ -1,21 +1,28 @@
 import React, { memo } from 'react';
-import projectCardImage from '../../../assets/images/project-card.png';
+import { useTranslation } from 'react-i18next';
 import { stats } from '../../../mock';
+import projectCardImage from '../../../assets/images/project-card.png';
 
 function Project() {
+    const { t } = useTranslation();
+
     return (
         // {/* projects section */ }
         <a name="about">
             <div className='bg-[#f9f9f9] p-4 lg:p-16 my-12 lg:mt-0'>
                 <div className='text-center mb-12'>
-                    <h2 className='text-[20px] lg:text-[30px] font-medium text-custom-gray font-gunterz'>О ПРОЕКТЕ</h2>
+                    <h2 className='text-[20px] lg:text-[30px] font-medium text-custom-gray font-gunterz'>
+                        {t("home.project.title")}
+                    </h2>
                 </div>
                 <div className='flex flex-col-reverse md:grid md:grid-cols-1 lg:grid-cols-2 mx-auto gap-10 lg:gap-0'>
                     <div className='col-span-1 flex flex-col gap-4 justify-center'>
-                        <h2 className='font-bold text-[20px] lg:text-[30px] text-center lg:text-left text-custom-gray font-montserrat'>STARTUP SEED</h2>
+                        <h2 className='font-bold text-[20px] lg:text-[30px] text-center lg:text-left text-custom-gray font-montserrat'>
+                            {t("home.project.left_title")}
+                        </h2>
                         <p className='text-[#7c7c7c] text-[13px] lg:text-[16px] text-center lg:text-left lg:pr-20 font-bold font-gilroy flex flex-col'>
-                            <span>Площадка для размещения или поиска проектов, специалистов, а также для обмена опытом внутри профессионального бизнес и диджитал сообщества.</span>
-                            <span>Startup Seed - это реализация своих идей в команде с экспертами-единомышленниками.</span>
+                            <span>{t("home.project.left_description_top")}</span>
+                            <span>{t("home.project.left_description_bottom")}</span>
                         </p>
                     </div>
                     <div className='col-span-1'>
@@ -29,7 +36,9 @@ function Project() {
                                         55+
                                     </h3>
                                     <p className='text-white lg:text-[15px] text-[14px] flex flex-wrap font-semibold font-gilroy w-[60%]'>
-                                        <span className={``}>Зарегистрированных специалистов</span>
+                                        <span className={``}>
+                                            {t("home.project.right_count_one_title")}
+                                        </span>
                                     </p>
                                 </div>
                                 <div className='absolute -right-6 lg:-right-20 -top-7 lg:-top-10'>
@@ -46,7 +55,9 @@ function Project() {
                                         60+
                                     </h3>
                                     <p className='text-white lg:text-[15px] text-[14px] flex flex-wrap font-semibold font-gilroy w-[55%] lg:w-[60%]'>
-                                        <span className={``}>Стартапов и инсайтов</span>
+                                        <span className={``}>
+                                            {t("home.project.right_count_two_title")}
+                                        </span>
                                     </p>
                                 </div>
                                 <div className='absolute -right-0 lg:-right-10 -top-0 lg:-top-10'>
@@ -63,7 +74,9 @@ function Project() {
                                         500+
                                     </h3>
                                     <p className='text-white lg:text-[15px] text-[14px] flex flex-wrap font-semibold font-gilroy w-[60%]'>
-                                        <span className={``}>Полезных контактов</span>
+                                        <span className={``}>
+                                            {t("home.project.right_count_three_title")}
+                                        </span>
                                     </p>
                                 </div>
                                 <div className='absolute -right-7 lg:-right-12 top-0 lg:-top-11'>
@@ -80,7 +93,9 @@ function Project() {
                                         &nbsp;
                                     </h3>
                                     <p className='text-white lg:text-[15px] text-[14px] flex flex-wrap font-semibold font-gilroy w-[70%]'>
-                                        <span className={``}>Профессиональный рост в крутой команде</span>
+                                        <span className={``}>
+                                            {t("home.project.right_count_four_title")}
+                                        </span>
                                     </p>
                                 </div>
                                 <div className='absolute right-6 lg:-right-12 -top-6 lg:-top-11'>

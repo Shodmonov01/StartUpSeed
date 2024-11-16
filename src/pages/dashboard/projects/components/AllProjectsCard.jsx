@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoStarSharp } from 'react-icons/io5';
 import ApplyModal from '../../../../components/apply-modal/ApplyModal';
-import { useState } from 'react';
 
 const AllProjectDetailCard = ({
   title = 'Front-End', // default title if none provided
@@ -11,6 +12,7 @@ const AllProjectDetailCard = ({
   link = '#', // default link
   skills = 'текст навыков',
 }) => {
+  const { t } = useTranslation();
   const [openApplyModal, setOpenApplyModal] = useState(false);
 
   const handleApply = () => setOpenApplyModal(true);
@@ -49,11 +51,11 @@ const AllProjectDetailCard = ({
         <div>
           {' '}
           <p className='font-gilroy-bold'>
-            Задачи и достижения:{' '}
+            {t("extraComponents.allProjectDetails.tasks_and_acheiv")}{" "}
             <span className='text-gray-600 text-sm'>{description}</span>
           </p>
           <p className='font-gilroy-bold'>
-            Навыки: <span className='text-gray-600 text-sm'>{skills}</span>
+            {t("extraComponents.allProjectDetails.skills")}{" "} <span className='text-gray-600 text-sm'>{skills}</span>
           </p>
         </div>
 
@@ -62,7 +64,7 @@ const AllProjectDetailCard = ({
             onClick={handleApply}
             className='bg-gray-800 text-white w-full text-sm px-6 py-4 rounded-md hover:bg-gray-700'
           >
-            Откликнуться
+            {t("extraComponents.allProjectDetails.reply")}
           </button>
         </div>
       </div>

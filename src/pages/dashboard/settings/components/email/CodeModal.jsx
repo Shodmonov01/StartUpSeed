@@ -1,8 +1,10 @@
 import React, { memo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { axiosInstances } from '../../../../../config/config';
 import { errorHandler, getToast, getToastWarn } from '../../../../../utils/options';
 
 function CodeModal(props) {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [code, setCode] = useState(false);
     const email_ref = useRef();
@@ -17,7 +19,9 @@ function CodeModal(props) {
                     email: email_ref.current.value,
                 });
                 if (res.status === 200 || res.status === 201) {
-                    getToast(res.data || "На этот адрес электронной почты был отправлен специальный код");
+                    getToast(
+                        res.data || t("toastMessage.codeModalPage.special_code_send")
+                    );
                     setLoading(false);
                     setCode(true);
                 } else {
@@ -42,7 +46,7 @@ function CodeModal(props) {
                     code: code_ref.current.value,
                 });
                 if (res.status === 200 || res.status === 201) {
-                    getToast("Электронная почта успешно изменена.");
+                    getToast(t("toastMessage.codeModalPage.edit_success"));
                     props.closeModal();
                     props.getData();
                     setCode(false);
@@ -63,20 +67,30 @@ function CodeModal(props) {
         <>
             <div className="sm:text-left text-txt_color-slate p-4 md:p-6 lg:p-14 flex flex-col gap-8">
                 <div className="text-sm sm:text-base font-normal flex flex-col gap-2">
-                    <h3 className='font-thin font-gunterz lg:text-left text-center'>СМЕНА ПОЧТЫ</h3>
-                    <span className='text-[#a7a5a5]'>Нам указанный вами новый адрес электронной почты будет выслано письмо <strong className='text-text-main_green font-thin'>с кодом подтверждения</strong>, каторый нужно будет ввести на следующем шаге.</span>
+                    <h3 className='font-thin font-gunterz lg:text-left text-center'>
+                        {t("dashboard.settings.email_modal.title")}
+                    </h3>
+                    <span className='text-[#a7a5a5]'>
+                        {t("dashboard.settings.email_modal.description")}{" "}
+                        <strong className='text-text-main_green font-thin'>
+                            {t("dashboard.settings.email_modal.subtitle_one")}
+                        </strong>
+                        , {t("dashboard.settings.email_modal.subtitle_two")}
+                    </span>
                     {/* <span className='cursor-pointer text-[22px]' onClick={props.closeModal}>&times;</span> */}
                 </div>
 
                 <div className='w-full'>
                     <span className='block font-gilroy text-md font-bold mb-2'>
-                        E-mail
+                        {t("dashboard.settings.email_modal.email_input_label")}
                     </span>
                     <input className='appearance-none bg-custom-light rounded-md w-full p-5 text-gray-700 leading-tight focus:outline-none'
                         id="email"
                         name="emails"
                         type="email"
-                        placeholder="Новый yourmail@mail.ru"
+                        placeholder={t(
+                            "dashboard.settings.email_modal.email_input_placeholder"
+                        )}
                         required
                         ref={email_ref}
                     />
@@ -84,13 +98,13 @@ function CodeModal(props) {
                 {code && (
                     <div className='w-full'>
                         <span className='block font-gilroy text-md font-bold mb-2'>
-                            Код подвержедения
+                            {t("dashboard.settings.email_modal.confirm_code")}
                         </span>
                         <input className='appearance-none bg-custom-light rounded-md w-full p-5 text-gray-700 leading-tight focus:outline-none'
                             id="code"
                             name="code_name"
                             type="text"
-                            placeholder="Код подвержедения"
+                            placeholder={t("dashboard.settings.email_modal.confirm_code")}
                             ref={code_ref}
                         />
                     </div>
@@ -101,7 +115,7 @@ function CodeModal(props) {
                         className='text-white col-span-1 bg-custom-gray w-full transition-all hover:bg-gray-700 hover:text-white font-gilroy-bold p-5 px-10 rounded focus:outline-none focus:shadow-outline lg:w-[40%]'
                         onClick={props.closeModal}
                     >
-                        Отменить
+                        {t("dashboard.settings.email_modal.cancel_button_text")}
                     </button>
                     {!code ? (
                         <button
@@ -110,7 +124,7 @@ function CodeModal(props) {
                             disabled={loading}
                             onClick={getCodeHandler}
                         >
-                            Получить код подвержедения
+                            {t("dashboard.settings.email_modal.save_button_text")}
                         </button>
                     ) : (
                         <button
@@ -119,7 +133,7 @@ function CodeModal(props) {
                             disabled={loading}
                             onClick={submitHandler}
                         >
-                            Отправмть код повторно
+                            {t("dashboard.settings.email_modal.send_try")}
                         </button>
                     )}
                 </div>

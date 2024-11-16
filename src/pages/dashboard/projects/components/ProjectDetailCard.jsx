@@ -1,13 +1,13 @@
 import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { IoStarSharp, IoStarOutline } from 'react-icons/io5';
 import { errorHandler, getToast, getToastWarn } from '../../../../utils/options';
 import { axiosInstances } from '../../../../config/config';
 
 const ProjectDetails = ({ data }) => {
+  const { t } = useTranslation();
   const [inData, setInData] = useState(data || {});
-
-  // console.log(data);
 
   // add favorite
   const addFavorite = async d => {
@@ -16,13 +16,15 @@ const ProjectDetails = ({ data }) => {
         project: d.id,
       });
       if (res.status === 200 || res.status === 201) {
-        getToast("Успешно добавлено в избранное.");
+        getToast(t("toastMessage.projectDetailCardPage.added_success"));
         let d = {
           ...inData,
           favorite: !inData.favorite
         }
         setInData(d);
-      } else getToastWarn(res.data?.message || "Попробуйте еще раз.");
+      } else getToastWarn(
+        res.data?.message || t("toastMessage.projectDetailCardPage.try_again")
+      );
     } catch (error) {
       // console.log(error);
       errorHandler(error);
@@ -34,13 +36,15 @@ const ProjectDetails = ({ data }) => {
     try {
       const res = await axiosInstances.delete(`/favourite/${d.id}`);
       if (res.status === 200 || res.status === 201) {
-        getToast("Успешно удалено в избранное.");
+        getToast(t("toastMessage.projectDetailCardPage.delete_success"));
         let d = {
           ...inData,
           favorite: !inData.favorite
         }
         setInData(d);
-      } else getToastWarn(res.data?.message || "Попробуйте еще раз.");
+      } else getToastWarn(
+        res.data?.message || t("toastMessage.projectDetailCardPage.try_again")
+      );
     } catch (error) {
       errorHandler(error);
     }
@@ -55,10 +59,10 @@ const ProjectDetails = ({ data }) => {
             <img src={inData.project_image} alt='no image' className='w-hull h-full rounded-full' />
           </div>
           <div className='flex-1'>
-            <h3 className='lg:text-lg text-md font-bold text-custom-gray'>
+            <h3 className='font-gilroy_bold lg:text-[20px] text-[16px] text-custom-gray'>
               {inData.name}
             </h3>
-            <p className='text-gray-600 text-sm'>
+            <p className='text-[#A7A5A5] font-gilroy_medium text-[13px] lg:text-[14px]'>
               {inData.description}
             </p>
           </div>

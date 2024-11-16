@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
 import EducationData from './EducationData';
 import { getAllEducations } from '../../../../redux/reducers/profileReducer';
@@ -10,6 +11,7 @@ import EducationForm from './EducationForm';
 
 function Education(props) {
     const { allEducations } = props;
+    const { t } = useTranslation();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(0);
@@ -51,7 +53,7 @@ function Education(props) {
         try {
             const res = await axiosInstances.post("/education/", obj);
             if (res.status) {
-                getToast("Успешно сохранено.");
+                getToast(t("toastMessage.educationPage.saved_success"));
                 reset();
                 setLoading(false);
                 getData();
@@ -89,7 +91,7 @@ function Education(props) {
 
                 <div className="dark:text-white text-xs flex flex-col gap-1 p-2 px-1 lg:px-2 py-4">
                     <span className='text-[20px] lg:text-[24px] font-medium text-custom-gray mb-8 lg:text-left text-center'>
-                        Образование
+                        {t("dashboard.profile.education.title")}
                     </span>
                     <EducationForm
                         handleSubmitEducation={handleSubmitEducation}
